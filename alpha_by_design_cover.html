@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha by Design - Cover</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .cover {
+            width: 612px;  /* 8.5 inches at 72dpi */
+            height: 792px; /* 11 inches at 72dpi */
+            background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 60px 50px;
+        }
+
+        .title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 58px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 18px;
+            font-weight: 300;
+            color: #8e94a6;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .author-section {
+            margin-top: auto;
+            padding-bottom: 20px;
+        }
+
+        .author-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .author-credentials {
+            font-size: 14px;
+            color: #8e94a6;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="cover">
+    <!-- Background SVG with formulas and stylized graphics -->
+    <svg width="612" height="792" viewBox="0 0 612 792" style="position: absolute; top: 0; left: 0;">
+        <!-- Gradient overlay -->
+        <defs>
+            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:#16213e;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#3498db;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#8e44ad;stop-opacity:0.8" />
+            </linearGradient>
+            <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+
+        <!-- Background -->
+        <rect width="612" height="792" fill="url(#bgGrad)"/>
+
+        <!-- Subtle grid pattern -->
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
+        </pattern>
+        <rect width="612" height="792" fill="url(#grid)"/>
+
+        <!-- Accent line at top -->
+        <rect x="50" y="145" width="120" height="3" fill="url(#accentGrad)" rx="1"/>
+
+        <!-- Stylized BBN Network (top right area) -->
+        <g opacity="0.15" transform="translate(320, 180)">
+            <!-- Nodes -->
+            <circle cx="50" cy="30" r="18" fill="none" stroke="#3498db" stroke-width="1.5"/>
+            <circle cx="130" cy="30" r="18" fill="none" stroke="#3498db" stroke-width="1.5"/>
+            <circle cx="210" cy="30" r="18" fill="none" stroke="#3498db" stroke-width="1.5"/>
+            <circle cx="90" cy="100" r="18" fill="none" stroke="#3498db" stroke-width="1.5"/>
+            <circle cx="170" cy="100" r="18" fill="none" stroke="#3498db" stroke-width="1.5"/>
+            <circle cx="130" cy="170" r="22" fill="none" stroke="#8e44ad" stroke-width="2"/>
+
+            <!-- Edges -->
+            <line x1="60" y1="45" x2="80" y2="85" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+            <line x1="125" y1="48" x2="95" y2="82" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+            <line x1="135" y1="48" x2="165" y2="82" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+            <line x1="200" y1="45" x2="180" y2="85" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+            <line x1="100" y1="118" x2="120" y2="150" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+            <line x1="160" y1="118" x2="140" y2="150" stroke="#3498db" stroke-width="1" opacity="0.6"/>
+
+            <!-- Red node highlight -->
+            <circle cx="50" cy="30" r="18" fill="none" stroke="#c0392b" stroke-width="2.5" opacity="0.8"/>
+        </g>
+
+        <!-- Stylized S-Curve (middle area) -->
+        <g opacity="0.12" transform="translate(30, 380)">
+            <path d="M 0 150
+                     C 50 150, 80 148, 120 140
+                     C 180 125, 220 90, 300 55
+                     C 380 25, 450 20, 550 18"
+                  fill="none" stroke="#27ae60" stroke-width="2.5"/>
+            <!-- Horizontal reference lines -->
+            <line x1="0" y1="20" x2="550" y2="20" stroke="#27ae60" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.5"/>
+            <line x1="0" y1="150" x2="120" y2="150" stroke="#27ae60" stroke-width="0.5" stroke-dasharray="4,4" opacity="0.5"/>
+            <!-- Alpha shaded area -->
+            <path d="M 0 150
+                     C 50 150, 80 148, 120 140
+                     C 180 125, 220 90, 250 70
+                     L 250 20 L 0 20 Z"
+                  fill="#27ae60" opacity="0.15"/>
+        </g>
+
+        <!-- Floating formulas -->
+        <g fill="#ffffff" font-family="Times New Roman, serif" font-style="italic">
+            <!-- Main Jacobian formula -->
+            <text x="50" y="620" font-size="16" opacity="0.25">&#8706;V/&#8706;z = (&#8706;V/&#8706;s) × (&#8706;s/&#8706;z)</text>
+
+            <!-- IR formula -->
+            <text x="380" y="580" font-size="14" opacity="0.2">IR = &#945; / TE</text>
+
+            <!-- BBN factorization -->
+            <text x="320" y="650" font-size="13" opacity="0.18">P(Z) = &#8719; P(Z&#7522; | Parents)</text>
+
+            <!-- Delta Value formula -->
+            <text x="420" y="700" font-size="12" opacity="0.15">&#916;V &#8776; J × &#916;x</text>
+
+            <!-- Expected return -->
+            <text x="60" y="680" font-size="11" opacity="0.12">E[R] = &#945; + &#946;F</text>
+
+            <!-- Sharpe -->
+            <text x="200" y="720" font-size="11" opacity="0.12">SR = E[r] / &#963;</text>
+        </g>
+
+        <!-- PDF curves overlay (bottom right) -->
+        <g opacity="0.1" transform="translate(400, 450)">
+            <!-- Consensus distribution -->
+            <path d="M 0 80 Q 30 80, 50 55 Q 70 20, 90 20 Q 110 20, 130 55 Q 150 80, 180 80"
+                  fill="none" stroke="#8e94a6" stroke-width="1.5"/>
+            <!-- Your distribution (shifted) -->
+            <path d="M 40 80 Q 70 80, 90 50 Q 110 15, 130 15 Q 150 15, 170 50 Q 190 80, 220 80"
+                  fill="none" stroke="#c0392b" stroke-width="1.5"/>
+        </g>
+
+        <!-- Decorative circles -->
+        <circle cx="550" cy="100" r="80" fill="none" stroke="#3498db" stroke-width="0.5" opacity="0.1"/>
+        <circle cx="550" cy="100" r="120" fill="none" stroke="#8e44ad" stroke-width="0.5" opacity="0.08"/>
+        <circle cx="550" cy="100" r="160" fill="none" stroke="#3498db" stroke-width="0.5" opacity="0.05"/>
+
+        <circle cx="80" cy="750" r="100" fill="none" stroke="#27ae60" stroke-width="0.5" opacity="0.08"/>
+        <circle cx="80" cy="750" r="150" fill="none" stroke="#27ae60" stroke-width="0.5" opacity="0.05"/>
+
+        <!-- Subtle diagonal lines -->
+        <line x1="450" y1="0" x2="612" y2="162" stroke="#ffffff" stroke-width="0.3" opacity="0.03"/>
+        <line x1="500" y1="0" x2="612" y2="112" stroke="#ffffff" stroke-width="0.3" opacity="0.03"/>
+        <line x1="0" y1="600" x2="162" y2="792" stroke="#ffffff" stroke-width="0.3" opacity="0.03"/>
+
+    </svg>
+
+    <!-- Text content -->
+    <div class="cover-content">
+        <div class="title">Alpha by Design</div>
+        <div class="subtitle">A Complete Framework for<br>Belief-Driven Investing</div>
+
+        <div class="author-section">
+            <div class="author-name">Jim Skufca</div>
+            <div class="author-credentials">CFA &nbsp;•&nbsp; FRM &nbsp;•&nbsp; CQF</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha by Design - Research Collection</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            min-height: 100vh;
+            font-family: 'Source Sans Pro', sans-serif;
+            color: #e0e0e0;
+            padding: 60px 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 52px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: 300;
+            color: #8e94a6;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .accent-line {
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db 0%, #8e44ad 100%);
+            margin: 25px auto;
+            border-radius: 2px;
+        }
+
+        /* Jacket Flap */
+        .jacket-flap {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 40px 45px;
+            margin-bottom: 50px;
+            line-height: 1.8;
+        }
+
+        .jacket-flap .hook {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 22px;
+            font-style: italic;
+            color: #ffffff;
+            margin-bottom: 25px;
+            border-left: 3px solid #3498db;
+            padding-left: 20px;
+        }
+
+        .jacket-flap p {
+            font-size: 16px;
+            color: #b8bcc8;
+            margin-bottom: 18px;
+        }
+
+        .jacket-flap .key-insight {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 3px solid #8e44ad;
+            padding: 15px 20px;
+            margin: 25px 0;
+            font-size: 15px;
+        }
+
+        .jacket-flap .key-insight strong {
+            color: #ffffff;
+        }
+
+        /* Document Cards */
+        .documents-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 28px;
+            color: #ffffff;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .doc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .doc-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .doc-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(52, 152, 219, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .doc-card .doc-number {
+            font-size: 12px;
+            color: #8e44ad;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .doc-card .doc-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .doc-card .doc-description {
+            font-size: 14px;
+            color: #8e94a6;
+            line-height: 1.6;
+        }
+
+        .doc-card .doc-audience {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #3498db;
+        }
+
+        /* Author */
+        .author-section {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .author-name {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 20px;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .author-credentials {
+            font-size: 14px;
+            color: #8e94a6;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="title">Alpha by Design</div>
+        <div class="subtitle">A Complete Framework for Belief-Driven Investing</div>
+        <div class="accent-line"></div>
+    </div>
+
+    <!-- Jacket Flap -->
+    <div class="jacket-flap">
+        <div class="hook">
+            "Alpha is created when an investor holds a fact-based, non-consensus belief and understands how that belief transmits to value. Everything follows from that."
+        </div>
+
+        <h3 style="color: #ffffff; font-family: 'Playfair Display', serif; margin: 30px 0 15px 0; font-size: 18px;">Why This Matters</h3>
+
+        <p>
+            The investment industry is saturated with technology that promises to "find alpha" — AI stock pickers,
+            sentiment analyzers, alternative data feeds, pattern detectors. Yet the best-resourced quant funds,
+            with petabytes of data and PhD teams, struggle to sustain edge. The premise is broken.
+        </p>
+
+        <p>
+            <strong>Alpha by Design</strong> starts from a different premise: alpha doesn't come from data or algorithms.
+            It comes from <em>beliefs</em> — specific, fact-based, non-consensus beliefs about how the world works,
+            held by humans who understand why they're right when the market is wrong.
+        </p>
+
+        <p>
+            This isn't philosophy. It's architecture. Once you accept where alpha actually originates,
+            the role of technology becomes clear — and the path to building systems that work becomes obvious.
+        </p>
+
+        <h3 style="color: #ffffff; font-family: 'Playfair Display', serif; margin: 30px 0 15px 0; font-size: 18px;">The Two-Product Thesis</h3>
+
+        <p>
+            This framework reduces to two defensible roles for investment technology:
+        </p>
+
+        <div class="key-insight" style="margin-bottom: 20px;">
+            <strong>1. Alpha Creation Assistance</strong><br>
+            Help investors form, articulate, and validate belief-based edges.<br><br>
+            <span style="color: #8e94a6;">Upstream. Cognitive. Belief-centric.</span><br><br>
+            This means: enumerate canonical belief nodes, identify where consensus lives, anchor beliefs to facts
+            (not vibes), and explicitly map belief → statement → value paths. Force precision:
+            <em>"Where exactly do you disagree? Which node carries the edge? What evidence would update this belief?"</em><br><br>
+            This is not prediction. This is <strong>belief hygiene</strong> — making implicit investment theses
+            explicit, structured, and falsifiable.
+        </div>
+
+        <div class="key-insight">
+            <strong>2. Alpha Capture Optimization</strong><br>
+            Given beliefs, maximize realized alpha at the portfolio level.<br><br>
+            <span style="color: #8e94a6;">Downstream. Quantitative. Execution-centric.</span><br><br>
+            Here you are no longer debating beliefs — you are optimizing their expression. Position sizing,
+            correlation control, belief overlap across holdings, time-phased conviction, risk budgeting,
+            and systematic harvest when edge is exhausted.<br><br>
+            The system doesn't say <em>"Our AI finds alpha."</em><br>
+            It says: <strong>"Our system makes alpha legible and exploitable."</strong>
+        </div>
+
+        <p style="margin-top: 25px;">
+            That's exactly where technology should sit in investing. It respects the boundary between
+            insight and execution instead of pretending one replaces the other.
+        </p>
+
+        <h3 style="color: #ffffff; font-family: 'Playfair Display', serif; margin: 30px 0 15px 0; font-size: 18px;">Who This Is For</h3>
+
+        <p>
+            <strong>Investment leadership</strong> designing how their firm captures and compounds analyst edge.<br>
+            <strong>Product architects</strong> building systems that serve the investment process rather than distract from it.<br>
+            <strong>Analysts and PMs</strong> who want to understand why some technology helps and most doesn't.<br>
+            <strong>Anyone</strong> tired of vendors promising algorithmic miracles and delivering expensive noise.
+        </p>
+
+        <h3 style="color: #ffffff; font-family: 'Playfair Display', serif; margin: 30px 0 15px 0; font-size: 18px;">How To Use This</h3>
+
+        <p>
+            Start with <strong>Document I</strong> if you want the theoretical foundation — why this framing is correct
+            and how belief networks formalize investment reasoning.
+        </p>
+        <p>
+            Go to <strong>Document II</strong> if you're building systems — the complete architecture for alpha capture,
+            from data layers through dashboards to AI boundaries.
+        </p>
+        <p>
+            Use <strong>Document III</strong> if you're implementing dashboards — practical guidance for teams who need
+            to know what to build without the full theoretical context.
+        </p>
+
+        <div style="background: rgba(142, 68, 173, 0.1); border-left: 3px solid #3498db; padding: 15px 20px; margin-top: 30px; font-size: 15px;">
+            <strong>The Bottom Line:</strong> This framework is conceptually coherent, aligned with how alpha actually works,
+            technically feasible, and commercially differentiable. It's infrastructure for belief-based alpha —
+            language that will resonate with serious investors and repel tourists.
+        </div>
+    </div>
+
+    <!-- Documents -->
+    <div class="documents-section">
+        <div class="section-title">The Collection</div>
+
+        <div class="doc-grid">
+            <a href="alpha_by_design_unified_v5.html" class="doc-card">
+                <div class="doc-number">Document I</div>
+                <div class="doc-title">Alpha by Design</div>
+                <div class="doc-description">
+                    The theoretical foundation. Establishes the boundary between edge creation and
+                    edge management, introduces Bayesian Belief Networks for analyst reasoning, and
+                    defines the alpha lifecycle from discovery through harvest.
+                </div>
+                <div class="doc-audience">For: Investment leadership, framework architects</div>
+            </a>
+
+            <a href="alpha_capture_unified_v2.html" class="doc-card">
+                <div class="doc-number">Document II</div>
+                <div class="doc-title">Alpha Capture System</div>
+                <div class="doc-description">
+                    The implementation blueprint. Details the seven dashboard functions, data layer
+                    architecture, AI boundaries, and the full inventory of monitoring tools — from
+                    consensus extraction to scorekeeping.
+                </div>
+                <div class="doc-audience">For: Product managers, system architects, analysts</div>
+            </a>
+
+            <a href="dashboard_design_guide.html" class="doc-card">
+                <div class="doc-number">Document III</div>
+                <div class="doc-title">Dashboard Design Guide</div>
+                <div class="doc-description">
+                    The practical handbook. Translates the framework into actionable guidance for
+                    teams building dashboards — what data exists, what can be derived, and how each
+                    visualization serves the investment process.
+                </div>
+                <div class="doc-audience">For: Dashboard developers, UX designers, data engineers</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Author -->
+    <div class="author-section">
+        <div class="author-name">Jim Skufca</div>
+        <div class="author-credentials">CFA &nbsp;•&nbsp; FRM &nbsp;•&nbsp; CQF</div>
+    </div>
+</div>
+
+</body>
+</html>

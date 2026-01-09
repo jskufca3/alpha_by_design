@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Design Guide</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            font-size: 85%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.7;
+            color: #1a1a1a;
+        }
+
+        h1 {
+            font-size: 1.8em;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            color: #2c3e50;
+            margin-top: 35px;
+            border-left: 4px solid #8e44ad;
+            padding-left: 12px;
+        }
+
+        .principle {
+            background: #f5eef8;
+            border: 2px solid #8e44ad;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 25px 0;
+        }
+
+        .principle strong {
+            color: #8e44ad;
+        }
+
+        .warning {
+            background: #fef9e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px 20px;
+            margin: 20px 0;
+        }
+
+        .do-dont {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .do {
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .dont {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .do h4, .dont h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .tldr {
+            background: #e8f4f8;
+            border: 2px solid #3498db;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Dashboard Design Guide</h1>
+<p><em>A North Star for the Dashboard Team</em></p>
+
+<h2>What Are Our Users Trying to Do?</h2>
+
+<p>Our users are <strong>professional investors</strong> — analysts and portfolio managers at asset management firms. Their job is to beat a benchmark (like the S&P 500) by finding investments that will outperform.</p>
+
+<table>
+    <tr>
+        <th>Term</th>
+        <th>What It Means</th>
+    </tr>
+    <tr>
+        <td><strong>Alpha (α)</strong></td>
+        <td>Returns above the benchmark. This is how investors prove their value. No alpha = no reason to exist.</td>
+    </tr>
+    <tr>
+        <td><strong>Edge</strong></td>
+        <td>An informational or analytical advantage that lets you predict outcomes better than the market. Edge creates alpha.</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus</strong></td>
+        <td>What "the market" collectively believes. To generate alpha, you must believe something different from consensus — and be right.</td>
+    </tr>
+    <tr>
+        <td><strong>Thesis</strong></td>
+        <td>The specific reason an investor believes a stock will outperform. "I think margins will expand because..." </td>
+    </tr>
+    <tr>
+        <td><strong>Price Target (PTA)</strong></td>
+        <td>The price an analyst believes a stock will reach. Usually with scenarios: bull case ($120), base case ($100), bear case ($80).</td>
+    </tr>
+    <tr>
+        <td><strong>Diffusion</strong></td>
+        <td>The process of a thesis becoming recognized by the market. As others "catch on," the price moves toward your target.</td>
+    </tr>
+    <tr>
+        <td><strong>Hedge</strong></td>
+        <td>A position that offsets risk you don't want. If you're bullish on Apple specifically but don't want general tech exposure, you hedge the tech risk.</td>
+    </tr>
+</table>
+
+<div class="principle">
+    <strong>The investor's challenge:</strong> Find situations where you know something the market doesn't, size your bets appropriately, and exit before the opportunity disappears.
+</div>
+
+<h2>How Our App Supports Them</h2>
+
+<p>Our app is an <strong>alpha management system</strong>. It doesn't tell investors what to buy — it helps them capture, size, track, and learn from their investment beliefs.</p>
+
+<table>
+    <tr>
+        <th>Step</th>
+        <th>What the Investor Does</th>
+        <th>How the App Helps</th>
+    </tr>
+    <tr>
+        <td><strong>1. Form Belief</strong></td>
+        <td>Research a company, develop a thesis</td>
+        <td>Outside scope (AI tools can assist, but belief is human)</td>
+    </tr>
+    <tr>
+        <td><strong>2. Capture Belief</strong></td>
+        <td>Document price target, scenarios, confidence</td>
+        <td>Structured input forms capture beliefs in usable format</td>
+    </tr>
+    <tr>
+        <td><strong>3. Size Position</strong></td>
+        <td>Decide how much to invest</td>
+        <td>Optimization engine calculates sizing based on conviction + track record</td>
+    </tr>
+    <tr>
+        <td><strong>4. Monitor</strong></td>
+        <td>Track if thesis is playing out</td>
+        <td>Dashboards show thesis status, market movement, remaining upside</td>
+    </tr>
+    <tr>
+        <td><strong>5. Exit</strong></td>
+        <td>Sell when thesis is priced in or wrong</td>
+        <td>Alerts when "forward Sharpe" declines (upside exhausted)</td>
+    </tr>
+    <tr>
+        <td><strong>6. Learn</strong></td>
+        <td>Review what worked and didn't</td>
+        <td>Scorekeeping tracks accuracy over time; calibrates future confidence</td>
+    </tr>
+</table>
+
+<h2>Where Dashboards Fit</h2>
+
+<p>Dashboards support steps 4-6: <strong>monitoring, alerting, and learning</strong>. They do NOT support step 1 (forming beliefs) — that's human judgment, potentially assisted by AI tools outside the app.</p>
+
+<div class="do-dont">
+    <div class="do">
+        <h4>Dashboards Show</h4>
+        <ul>
+            <li>Current state (exposures, performance)</li>
+            <li>Thesis progress (is it working?)</li>
+            <li>Alerts (what needs attention?)</li>
+            <li>Track record (how accurate am I?)</li>
+        </ul>
+    </div>
+    <div class="dont">
+        <h4>Dashboards Don't</h4>
+        <ul>
+            <li>Tell users what to buy</li>
+            <li>Generate investment ideas</li>
+            <li>Make predictions</li>
+            <li>Replace human judgment</li>
+        </ul>
+    </div>
+</div>
+
+<div class="tldr">
+    <strong>The Key Insight:</strong> Alpha comes from human beliefs. The app captures those beliefs and helps deploy them efficiently. Dashboards are the monitoring layer — showing state, progress, and accuracy. They don't create alpha; they help preserve it.
+</div>
+
+<h2>The Absolute Return Problem: Why Risk Monitoring Matters</h2>
+
+<p>There's a second, equally important reason dashboards exist — rooted in how asset management actually works.</p>
+
+<div class="principle">
+    <strong>The Business Reality:</strong> Clients want <em>both</em> alpha (beating the benchmark) <em>and</em> absolute returns (actual money). Alpha alone isn't enough.
+</div>
+
+<p>Here's the math that drives everything:</p>
+
+<table>
+    <tr>
+        <th>Component</th>
+        <th>Typical Amount</th>
+    </tr>
+    <tr>
+        <td><strong>Alpha</strong> (stock-picking skill)</td>
+        <td>2-3% per year if you're good</td>
+    </tr>
+    <tr>
+        <td><strong>Beta</strong> (market return)</td>
+        <td>7-10% long-term average</td>
+    </tr>
+    <tr>
+        <td><strong>Client expectation</strong></td>
+        <td>8-12% total return</td>
+    </tr>
+</table>
+
+<p><strong>The problem:</strong> If a PM hedges away all market risk, they're left with only alpha — maybe 2-3%. But clients expect 8%+. So PMs must <em>intentionally keep</em> market exposure (beta) to generate absolute returns.</p>
+
+<div class="warning">
+    <strong>The consequence:</strong> PMs are carrying systematic risk (market moves, sector rotations, style shifts) that they <em>have no edge on</em>. They can't predict these — they're just along for the ride. But they need the return.
+</div>
+
+<p><strong>This is why dashboards matter:</strong></p>
+
+<ul>
+    <li>PMs are <em>choosing</em> to carry risk they can't predict</li>
+    <li>They need to <em>monitor</em> that risk actively: "What am I exposed to? Is it behaving? Should I adjust?"</li>
+    <li>Dashboards aren't about eliminating risk — they're about <strong>managing risk you're intentionally keeping</strong></li>
+</ul>
+
+<div class="do-dont">
+    <div class="dont">
+        <h4>Not This</h4>
+        <p>"Dashboards help you hedge away all risk"</p>
+    </div>
+    <div class="do">
+        <h4>This</h4>
+        <p>"Dashboards help you understand and manage the risk you're choosing to keep"</p>
+    </div>
+</div>
+
+<p>This is arguably the <strong>biggest practical reason</strong> for Functions 4-5 (Hedge Identification, Hedge Execution). Users aren't trying to eliminate exposure — they're trying to monitor exposure they need but can't predict.</p>
+
+<h3>Concrete Example: Alpha Corruption</h3>
+
+<p><strong>Alpha corruption</strong> = when market/factor movements (that you can't predict) overwhelm your stock-picking returns.</p>
+
+<table>
+    <tr>
+        <th>Dashboard Shows</th>
+        <th>What It Means</th>
+    </tr>
+    <tr>
+        <td>"You have 0.3 loading on Value factor"</td>
+        <td>PM has exposure to "value stocks" as a group</td>
+    </tr>
+    <tr>
+        <td>"Value factor is down 8% this month"</td>
+        <td>Value stocks are getting crushed</td>
+    </tr>
+    <tr>
+        <td>"Your alpha: +3%, Factor drag: -2.4%"</td>
+        <td>Stock picks are working, but Value exposure is killing the result</td>
+    </tr>
+    <tr>
+        <td>Decision</td>
+        <td>"Should I hedge some Value exposure to protect my alpha?"</td>
+    </tr>
+</table>
+
+<p>This workflow — <strong>see loadings → see factor performance → see impact → decide to hedge</strong> — is what Functions 4-5 dashboards enable.</p>
+
+<hr>
+
+<h2>What Data We Have Today</h2>
+
+<p>Before designing dashboards, know what's actually available:</p>
+
+<table>
+    <tr>
+        <th>Data Type</th>
+        <th>Plain English</th>
+        <th>Source</th>
+    </tr>
+    <tr>
+        <td><strong>Holdings</strong></td>
+        <td>What stocks we own, how much of each, what % of portfolio</td>
+        <td>Our trading system</td>
+    </tr>
+    <tr>
+        <td><strong>Price Targets + Scenarios</strong></td>
+        <td>Analyst predictions: "I think it goes to $120 (bull), $100 (base), or $80 (bear)"</td>
+        <td>Captured in our app</td>
+    </tr>
+    <tr>
+        <td><strong>Prices</strong></td>
+        <td>Current and historical stock prices</td>
+        <td>Market data feed</td>
+    </tr>
+    <tr>
+        <td><strong>Wall Street Estimates</strong></td>
+        <td>What other analysts expect for earnings, revenue, etc.</td>
+        <td>FactSet (data vendor)</td>
+    </tr>
+    <tr>
+        <td><strong>Market Factor Returns</strong></td>
+        <td>How "the market," "growth stocks," "value stocks," etc. performed</td>
+        <td>Factor data vendor</td>
+    </tr>
+    <tr>
+        <td><strong>Company Financials</strong></td>
+        <td>Revenue, earnings, margins, balance sheet data</td>
+        <td>FactSet</td>
+    </tr>
+    <tr>
+        <td><strong>Historical Predictions</strong></td>
+        <td>What our analysts predicted in the past + what actually happened</td>
+        <td>Captured in our app</td>
+    </tr>
+</table>
+
+<h2>Derived Data We Can Compute</h2>
+
+<p>From the raw data above, these metrics can be calculated:</p>
+
+<table>
+    <tr>
+        <th>Metric</th>
+        <th>Plain English</th>
+        <th>Buildable?</th>
+    </tr>
+    <tr>
+        <td><strong>Expected Price Target</strong></td>
+        <td>Average of bull/base/bear targets weighted by their probabilities. "If I'm 20% bull, 60% base, 20% bear, what's my blended target?"</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Expected Return</strong></td>
+        <td>How much upside is left? (Expected target ÷ current price) - 1</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Forward Sharpe</strong></td>
+        <td>Expected return adjusted for risk. High = good risk/reward remaining. Low = thesis mostly played out.</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Analyst Accuracy (Ω)</strong></td>
+        <td>How good is this analyst's track record? Compares their stated confidence to actual outcomes over time.</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Stock-Picking Return (α)</strong></td>
+        <td>Return from picking the right stocks, minus market/sector moves. "Did we win because we're smart, or because tech went up?"</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Market Exposures (β)</strong></td>
+        <td>How much of our portfolio moves with the market, with growth stocks, with value stocks, etc.</td>
+        <td>Yes</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus Divergence</strong></td>
+        <td>How different is our view from Wall Street's view? Big divergence = potential alpha (if right).</td>
+        <td>Yes</td>
+    </tr>
+</table>
+
+<h2>Practical vs Aspirational</h2>
+
+<div class="warning">
+    <strong>~85% of dashboards are buildable with existing data.</strong> The remaining ~15% require new data capture (detailed thesis documentation, key driver identification, portfolio manager views). Know the difference before committing resources.
+</div>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>What's Included</th>
+        <th>Data Status</th>
+    </tr>
+    <tr>
+        <td><strong>Phase 1: Build Now</strong></td>
+        <td>Risk-adjusted upside remaining, stock-picking vs market return, analyst accuracy scores, comparison to Wall Street, basic performance/risk</td>
+        <td>Data exists today</td>
+    </tr>
+    <tr>
+        <td><strong>Phase 2: Enhance</strong></td>
+        <td>Hedge recommendations, thesis status ("on track" / "at risk"), implied market expectations</td>
+        <td>Needs additional logic</td>
+    </tr>
+    <tr>
+        <td><strong>Phase 3: Aspire</strong></td>
+        <td>Detailed thesis capture (key drivers, evidence checkpoints), advanced market-implied analytics</td>
+        <td>Needs new data capture</td>
+    </tr>
+</table>
+
+<h2>The Core Principle</h2>
+
+<div class="principle">
+    <strong>Edge enters only through human beliefs. Everything else is infrastructure.</strong><br><br>
+    The app is an alpha <em>management</em> system, not an alpha <em>generation</em> system. Dashboards capture, display, and support decisions — they don't make the decisions.
+</div>
+
+<h2>What Dashboards Are For</h2>
+
+<table>
+    <tr>
+        <th>Function</th>
+        <th>Purpose</th>
+    </tr>
+    <tr>
+        <td><strong>Monitoring</strong></td>
+        <td>Show current state — exposures, performance, thesis status</td>
+    </tr>
+    <tr>
+        <td><strong>Workflow</strong></td>
+        <td>Capture structured inputs — beliefs, scenarios, approvals</td>
+    </tr>
+    <tr>
+        <td><strong>Alerts</strong></td>
+        <td>Flag when attention is needed — limits, triggers, anomalies</td>
+    </tr>
+    <tr>
+        <td><strong>Scorekeeping</strong></td>
+        <td>Track accuracy over time — who was right, what worked</td>
+    </tr>
+</table>
+
+<h2>What Dashboards Are NOT For</h2>
+
+<div class="warning">
+    <strong>Dashboards don't tell users what to believe.</strong><br>
+    They show data. They don't say "buy this stock" or "this sector will outperform." That judgment comes from humans.
+</div>
+
+<div class="do-dont">
+    <div class="do">
+        <h4>Design For</h4>
+        <ul>
+            <li>"Where am I exposed?"</li>
+            <li>"Is my thesis on track?"</li>
+            <li>"How accurate have I been?"</li>
+            <li>"What needs attention?"</li>
+        </ul>
+    </div>
+    <div class="dont">
+        <h4>Don't Design For</h4>
+        <ul>
+            <li>"What should I buy?"</li>
+            <li>"Is this a good stock?"</li>
+            <li>"What does this news mean?"</li>
+            <li>"Generate alpha for me"</li>
+        </ul>
+    </div>
+</div>
+
+<h2>The Seven Dashboard Functions</h2>
+
+<p>All dashboards serve one of these purposes:</p>
+
+<table>
+    <tr>
+        <th>#</th>
+        <th>Function</th>
+        <th>Plain English</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Consensus Extraction</td>
+        <td>"What does Wall Street think?" — Shows market expectations so users know what they're disagreeing with.</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Consensus Monitoring</td>
+        <td>"Is Wall Street changing its mind?" — Tracks if analysts are revising estimates up or down.</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Diffusion Monitoring</td>
+        <td>"Is my thesis working?" — Shows if the market is moving toward the user's view (price approaching target).</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Hedge Identification</td>
+        <td>"What risks am I taking that I didn't intend?" — Shows unintended bets (e.g., accidentally heavy in tech).</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Hedge Execution</td>
+        <td>"How do I offset that risk?" — Suggests ways to neutralize unwanted exposures.</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Scorekeeping</td>
+        <td>"How accurate have I been?" — Tracks who was right, who was wrong, and why.</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Core Analytics</td>
+        <td>"How are we doing?" — Standard performance and risk metrics. Table stakes — everyone has these.</td>
+    </tr>
+</table>
+
+<h2>Who Uses What</h2>
+
+<table>
+    <tr>
+        <th>User</th>
+        <th>Primary Dashboard Needs</th>
+    </tr>
+    <tr>
+        <td><strong>Analyst</strong></td>
+        <td>Belief capture forms, diffusion tracking, accuracy review</td>
+    </tr>
+    <tr>
+        <td><strong>Portfolio Manager</strong></td>
+        <td>Aggregate views, optimization outputs, exposure monitoring</td>
+    </tr>
+    <tr>
+        <td><strong>Risk Manager</strong></td>
+        <td>Exposure dashboards, limit compliance, drawdown alerts</td>
+    </tr>
+    <tr>
+        <td><strong>Leadership</strong></td>
+        <td>Analyst rankings, system health, process metrics</td>
+    </tr>
+</table>
+
+<h2>Dashboards vs AI</h2>
+
+<p>AI is becoming the primary interface for exploration and queries. Dashboards remain valuable for:</p>
+
+<table>
+    <tr>
+        <th>Dashboards Best For</th>
+        <th>AI Best For</th>
+    </tr>
+    <tr>
+        <td>Ambient monitoring (wall screens)</td>
+        <td>Ad-hoc questions</td>
+    </tr>
+    <tr>
+        <td>Structured data entry</td>
+        <td>Natural language queries</td>
+    </tr>
+    <tr>
+        <td>Regulatory reporting</td>
+        <td>Cross-data synthesis</td>
+    </tr>
+    <tr>
+        <td>At-a-glance state awareness</td>
+        <td>Open-ended exploration</td>
+    </tr>
+</table>
+
+<div class="principle">
+    <strong>Design implication:</strong> Dashboards should be optimized for <em>monitoring</em> (always-on, ambient awareness), not <em>exploration</em> (AI handles that better).
+</div>
+
+<h2>Where the Value Really Lives</h2>
+
+<p>Dashboard <em>displays</em> are easy to replicate. What's hard to replicate:</p>
+
+<table>
+    <tr>
+        <th>Low Value (Easy to Copy)</th>
+        <th>High Value (Hard to Copy)</th>
+    </tr>
+    <tr>
+        <td>Visual design, layouts, charts</td>
+        <td>The calculations underneath the display</td>
+    </tr>
+    <tr>
+        <td>Standard metrics everyone shows</td>
+        <td>Our proprietary metrics (analyst accuracy, risk-adjusted upside)</td>
+    </tr>
+    <tr>
+        <td>Generic reporting</td>
+        <td>AI/ML trained on our historical prediction data</td>
+    </tr>
+</table>
+
+<div class="warning">
+    <strong>Prioritize the data layer.</strong> A beautiful dashboard on bad data is worthless. Solid derived data with a basic display is valuable.
+</div>
+
+<h2>Design Checklist</h2>
+
+<p>Before building a dashboard, ask:</p>
+
+<ul>
+    <li><strong>Which of the 7 functions does this serve?</strong> (If none, reconsider)</li>
+    <li><strong>Who is the user?</strong> (Analyst, PM, Risk, Leadership)</li>
+    <li><strong>Is the data available today?</strong> (Check Phase 1/2/3 — don't design for data we don't have)</li>
+    <li><strong>What derived data does it require?</strong> (Can we compute it from existing raw data?)</li>
+    <li><strong>Monitoring or workflow?</strong> (Optimize for the right mode)</li>
+    <li><strong>Could AI answer this better?</strong> (If yes, maybe don't build a dashboard)</li>
+    <li><strong>Does it generate proprietary data?</strong> (If yes, prioritize it — this builds moat)</li>
+</ul>
+
+<div class="warning">
+    <strong>Data-first rule:</strong> If the required data doesn't exist, the dashboard is Phase 3 (aspirational). Don't build UI for data we can't populate.
+</div>
+
+<hr>
+
+<p style="text-align: center; color: #888; margin-top: 30px; font-style: italic;">
+    For full context, see: Alpha Capture: From Principles to Practice
+</p>
+
+</body>
+</html>

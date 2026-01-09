@@ -1,0 +1,3297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Capture: From Principles to Practice</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            font-size: 80%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            color: #1a1a1a;
+            background: #fefefe;
+        }
+
+        h1 {
+            font-size: 2em;
+            border-bottom: 3px solid #2c3e50;
+            padding-bottom: 15px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            border-left: 4px solid #8e44ad;
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: 1.15em;
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            font-size: 1em;
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        th {
+            background: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .part-header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            border-radius: 5px;
+            margin: 50px 0 30px 0;
+        }
+
+        .part-header h2 {
+            color: white;
+            border-left: none;
+            padding-left: 0;
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .part-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 1em;
+        }
+
+        .principle {
+            background: #f5eef8;
+            border: 2px solid #8e44ad;
+            color: #1a1a1a;
+            padding: 20px 25px;
+            border-radius: 5px;
+            margin: 25px 0;
+        }
+
+        .principle strong {
+            display: block;
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+
+        .insight {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 20px 25px;
+            margin: 25px 0;
+        }
+
+        .insight-label {
+            font-weight: 600;
+            color: #2980b9;
+            margin-bottom: 8px;
+        }
+
+        .warning {
+            background: #fef9e7;
+            border-left: 4px solid #f39c12;
+            padding: 20px 25px;
+            margin: 25px 0;
+        }
+
+        .outside {
+            background: #e8f8f0;
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .inside {
+            background: #eaf2f8;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .boundary-title {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .layer {
+            background: #f8f9fa;
+            border-left: 4px solid #8e44ad;
+            padding: 20px 25px;
+            margin: 25px 0;
+        }
+
+        .layer-title {
+            font-weight: 600;
+            color: #8e44ad;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .function-header {
+            background: #2c3e50;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 5px;
+            margin: 30px 0 15px 0;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .tag-diff {
+            background: #d5f5e3;
+            color: #1e8449;
+        }
+
+        .tag-core {
+            background: #ebedef;
+            color: #5d6d7e;
+        }
+
+        .tag-deliver {
+            background: #d4efdf;
+            color: #1d8348;
+        }
+
+        .tag-partial {
+            background: #fdebd0;
+            color: #b9770e;
+        }
+
+        .tag-aspire {
+            background: #e8daef;
+            color: #6c3483;
+        }
+
+        .formula {
+            background: #f4f4f8;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1em;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .value-prop {
+            background: #f5eef8;
+            border: 2px solid #8e44ad;
+            padding: 25px;
+            border-radius: 5px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .value-prop .headline {
+            font-size: 1.2em;
+            font-style: italic;
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+
+        .value-prop .subtext {
+            font-size: 0.95em;
+            color: #1a1a1a;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 50px 0;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .toc-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .toc li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #3498db;
+        }
+
+        .toc-part {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .check {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .cross {
+            color: #c0392b;
+            font-weight: bold;
+        }
+
+        .partial {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .workspace {
+            background: #f8f9fa;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+
+        .workspace-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .summary-box {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .phase-header {
+            background: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+        }
+
+        .phase-header.phase-2 {
+            background: #f39c12;
+        }
+
+        .phase-header.phase-3 {
+            background: #8e44ad;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Alpha Capture</h1>
+<p class="subtitle">A Companion to <em>Alpha by Design</em>: Translating the Framework into Tools, Dashboards, and AI</p>
+
+<div class="insight" style="margin-top: 0;">
+    <div class="insight-label">About This Document</div>
+    This document is the practical companion to <em>Alpha by Design: A Complete Framework for Belief-Driven Investing</em>. Where the parent document establishes <strong>why</strong> belief-based investing works and <strong>what</strong> the theoretical foundations are, this companion addresses <strong>how</strong> to implement those principles in technology: data architecture, derived metrics, dashboards, AI capabilities, and product roadmap.
+</div>
+
+<div class="toc">
+    <div class="toc-title">Contents</div>
+
+    <div class="toc-part">Part 1: Conceptual Foundation (WHY)</div>
+    <ul>
+        <li>The Alpha Process: Where Dashboards Fit</li>
+        <li>The Foundational Principle</li>
+        <li>The Boundary Condition</li>
+        <li>The Conservation Law (including: Does OPS Create Alpha?)</li>
+        <li>The Value Proposition</li>
+    </ul>
+
+    <div class="toc-part">Part 2: App Architecture (WHAT)</div>
+    <ul>
+        <li>The Stack: From Data to Decision</li>
+        <li>User Personas: Who Uses What</li>
+        <li>Layer 1: Raw Data (+ Requirements by Function)</li>
+        <li>Layer 2: Derived Data (+ Requirements by Function)</li>
+        <li>Layer 3: Dashboards (7 Functions)</li>
+        <li>Layer 4: AI (Inside vs Outside; Dashboard-AI Relationship)</li>
+        <li>Layer 5: Optimization Engine</li>
+    </ul>
+
+    <div class="toc-part">Part 3: Implementation (HOW/WHEN)</div>
+    <ul>
+        <li>Differentiation vs Table Stakes</li>
+        <li>Deliverability Assessment</li>
+        <li>Implementation Phases</li>
+        <li>The Monitoring Philosophy</li>
+        <li>IP and Defensibility: Where the Moat Lives</li>
+    </ul>
+</div>
+
+<!-- ============================================================== -->
+<!-- PART 1: CONCEPTUAL FOUNDATION -->
+<!-- ============================================================== -->
+
+<div class="part-header">
+    <h2>Part 1: Conceptual Foundation</h2>
+    <p>WHY the architecture is what it is</p>
+</div>
+
+<h2>The Alpha Process: Where Dashboards Fit</h2>
+
+<p>Before examining what dashboards can and cannot do, we must ground them in the <strong>alpha-generation process</strong> they serve. The complete framework is developed in <em>Alpha by Design</em>; here we summarize the lifecycle to establish context.</p>
+
+<h3>The Alpha Lifecycle</h3>
+
+<p>Alpha generation is not a single event but a <strong>process with distinct phases</strong>:</p>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>What Happens</th>
+        <th>Who Owns It</th>
+    </tr>
+    <tr>
+        <td><strong>1. Edge Discovery</strong></td>
+        <td>Identify where your beliefs diverge from consensus and why you're right</td>
+        <td>Analyst (company-specific) / PM (systematic)</td>
+    </tr>
+    <tr>
+        <td><strong>2. Edge Articulation</strong></td>
+        <td>Make beliefs explicit: price targets, scenarios, probabilities, red nodes</td>
+        <td>Analyst</td>
+    </tr>
+    <tr>
+        <td><strong>3. Edge Transmission</strong></td>
+        <td>Translate analyst beliefs into portfolio-level inputs</td>
+        <td>Analyst → PM</td>
+    </tr>
+    <tr>
+        <td><strong>4. Edge Optimization</strong></td>
+        <td>Convert beliefs into optimal position sizes given risk constraints</td>
+        <td>PM / Optimization Engine</td>
+    </tr>
+    <tr>
+        <td><strong>5. Edge Monitoring</strong></td>
+        <td>Track diffusion, consensus convergence, forward Sharpe decay</td>
+        <td>PM / System</td>
+    </tr>
+    <tr>
+        <td><strong>6. Edge Harvest</strong></td>
+        <td>Exit when edge is exhausted; redeploy capital to highest forward Sharpe</td>
+        <td>PM</td>
+    </tr>
+</table>
+
+<h3>Where Dashboards Serve the Process</h3>
+
+<p>Dashboards do not participate equally in all phases. Their value concentrates in specific areas:</p>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>Dashboard Role</th>
+        <th>Value Type</th>
+    </tr>
+    <tr>
+        <td><strong>Edge Discovery</strong></td>
+        <td>Minimal — discovery is human cognition, not data display</td>
+        <td>—</td>
+    </tr>
+    <tr>
+        <td><strong>Edge Articulation</strong></td>
+        <td>Capture interface — forms, scenario builders, red node elicitation</td>
+        <td>Workflow support</td>
+    </tr>
+    <tr>
+        <td><strong>Edge Transmission</strong></td>
+        <td>Display analyst inputs aggregated for PM review</td>
+        <td>Information presentation</td>
+    </tr>
+    <tr>
+        <td><strong>Edge Optimization</strong></td>
+        <td>Show optimization outputs, constraints, what-if scenarios</td>
+        <td>Decision support</td>
+    </tr>
+    <tr>
+        <td><strong>Edge Monitoring</strong></td>
+        <td><strong>Primary value</strong> — track consensus, diffusion, forward Sharpe, exposures</td>
+        <td>State awareness</td>
+    </tr>
+    <tr>
+        <td><strong>Edge Harvest</strong></td>
+        <td>Trigger alerts, show redeployment opportunities</td>
+        <td>Action prompts</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    Dashboards are <strong>monitoring and workflow tools</strong>, not discovery tools. They excel at showing <em>where you are</em> in the alpha process, not at telling you <em>what to believe</em>. This distinction — between infrastructure and edge — frames everything that follows.
+</div>
+
+<h3>The Benchmark Reality: Why Active Risk Monitoring Matters</h3>
+
+<p>There is a second, equally important reason why dashboards are essential — one rooted in the business model of asset management itself.</p>
+
+<div class="principle">
+    <strong>The Absolute Return Requirement</strong><br>
+    Asset managers must deliver both <strong>alpha</strong> (outperformance vs. benchmark) <em>and</em> <strong>absolute returns</strong> (actual money in clients' pockets). Alpha alone isn't enough.
+</div>
+
+<p>Consider the math:</p>
+
+<table>
+    <tr>
+        <th>Component</th>
+        <th>Typical Magnitude</th>
+        <th>Source</th>
+    </tr>
+    <tr>
+        <td><strong>Alpha (stock-picking edge)</strong></td>
+        <td>2-3% annually if you're good</td>
+        <td>Analyst beliefs, company-specific insight</td>
+    </tr>
+    <tr>
+        <td><strong>Beta (market return)</strong></td>
+        <td>7-10% long-term average</td>
+        <td>Systematic exposure to equity markets</td>
+    </tr>
+    <tr>
+        <td><strong>Client expectation</strong></td>
+        <td>8-12% total return</td>
+        <td>Absolute returns, not just relative</td>
+    </tr>
+</table>
+
+<p>The implication is stark: <strong>alpha alone cannot meet client expectations</strong>. A PM who fully hedges systematic risk is left with only alpha — perhaps 2-3%. Clients paying fees expect absolute returns, not just benchmark-relative outperformance.</p>
+
+<h4>The Structural Consequence</h4>
+
+<p>This creates an unavoidable situation:</p>
+
+<ul>
+    <li>PMs must <strong>intentionally carry systematic risk</strong> (beta) to generate absolute returns</li>
+    <li>This systematic risk is exposure they <strong>have no edge on</strong> — they can't predict market crashes, sector rotations, or style shifts</li>
+    <li>They're choosing to carry risk for return, not because they have insight</li>
+</ul>
+
+<div class="warning">
+    <strong>The Dashboard Implication:</strong> Since PMs are intentionally carrying systematic risk they can't predict, they must <strong>actively monitor</strong> that risk. This is not a failure to hedge — it's a business requirement. Dashboards become essential for: "What systematic exposures am I carrying? How are they behaving? When should I adjust?"
+</div>
+
+<h4>What This Means for Functions 4-5</h4>
+
+<p>This reframes Hedge Identification and Hedge Execution:</p>
+
+<table>
+    <tr>
+        <th>Traditional View</th>
+        <th>Reality</th>
+    </tr>
+    <tr>
+        <td>"Hedge everything you don't have edge on"</td>
+        <td>Can't — you need beta for absolute returns</td>
+    </tr>
+    <tr>
+        <td>"Dashboards help you eliminate risk"</td>
+        <td>Dashboards help you <strong>understand and manage</strong> risk you're choosing to keep</td>
+    </tr>
+    <tr>
+        <td>"Clean portable alpha"</td>
+        <td>A theoretical ideal, not practical for most mandates</td>
+    </tr>
+</table>
+
+<p>The practical questions become:</p>
+<ul>
+    <li>"What systematic exposures do I have?" (Hedge Identification)</li>
+    <li>"Are they larger than I intended?" (Monitoring)</li>
+    <li>"How are those factors performing?" (Factor Performance)</li>
+    <li>"Is factor drag corrupting my alpha?" (Alpha Corruption Monitor)</li>
+    <li>"Is now a good time to tactically hedge?" (Hedge Execution)</li>
+</ul>
+
+<h4>Concrete Example: Alpha Corruption</h4>
+
+<p>Consider a PM whose stock picks are generating 3% alpha, but who has unintended Value factor exposure:</p>
+
+<table>
+    <tr>
+        <th>What Dashboard Shows</th>
+        <th>PM Interpretation</th>
+    </tr>
+    <tr>
+        <td>Factor Loadings: 0.3 beta to Value</td>
+        <td>"I have meaningful Value exposure I didn't explicitly choose"</td>
+    </tr>
+    <tr>
+        <td>Factor Performance: Value down 8% MTD</td>
+        <td>"Value is getting crushed this month"</td>
+    </tr>
+    <tr>
+        <td>Alpha Corruption: -2.4% from Value drag</td>
+        <td>"My +3% alpha is being reduced to +0.6% by factor exposure"</td>
+    </tr>
+    <tr>
+        <td>Decision prompt</td>
+        <td>"Should I tactically hedge Value to protect my stock-picking alpha?"</td>
+    </tr>
+</table>
+
+<p>This is the core use case for Functions 4-5: not eliminating all systematic risk, but <strong>monitoring the systematic risk you're carrying and taking tactical action when it corrupts your alpha</strong>.</p>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    Dashboards for hedge identification and execution aren't about eliminating systematic risk — they're about <strong>informed exposure management</strong>. PMs are intentionally carrying beta; dashboards help them do so with eyes open, and take tactical action when factor movements threaten to overwhelm their stock-picking edge.
+</div>
+
+<h3>The Implication for This Document</h3>
+
+<p>Understanding where dashboards fit in the alpha lifecycle leads directly to the claims we'll make:</p>
+
+<ul>
+    <li><strong>Dashboards don't generate edge</strong> — because edge generation happens in Phase 1 (Discovery), where dashboards have minimal role</li>
+    <li><strong>Dashboards support edge management</strong> — because Phases 4-6 (Optimization, Monitoring, Harvest) are where dashboards excel</li>
+    <li><strong>The boundary matters</strong> — because conflating "shows useful data" with "generates alpha" leads to misallocated resources and false expectations</li>
+</ul>
+
+<p>With this context established, we can now state the foundational principles precisely.</p>
+
+<hr>
+
+<h2>The Foundational Principle</h2>
+
+<div class="principle">
+    <strong>Edge enters only through human beliefs. Everything else is infrastructure.</strong>
+    The app is an alpha management system, not an alpha generation system. It captures, optimizes, deploys, measures, and retires edge that originates outside its boundary.
+</div>
+
+<h3>Claim 1: Real-Time Dashboard Data is Generally Unedgeable</h3>
+
+<p>Real-time data is largely symmetric — most participants see it simultaneously. Symmetric information is already priced. Therefore:</p>
+
+<ul>
+    <li>Dashboards displaying real-time data <strong>rarely generate edge</strong></li>
+    <li>Derived data (calculations on symmetric inputs) <strong>rarely generate edge on their own</strong></li>
+    <li>AI operating on symmetric data alone <strong>faces steep headwinds</strong></li>
+</ul>
+
+<p>This is largely true but rarely acknowledged — because it challenges the value proposition of most data products.</p>
+
+<p><em>Caveat: Speed advantages, superior processing, or unique data combinations can create edge even from "symmetric" inputs. But these are specific, defensible advantages — not the general case. Most users of dashboards and derived data do not have them.</em></p>
+
+<h3>Claim 2: Legitimate Dashboard Functions</h3>
+
+<p>If dashboardable data rarely generates edge, dashboards provide their clearest value for:</p>
+
+<ol>
+    <li><strong>Understanding consensus</strong> — what does the market believe? (so you know what to diverge from)</li>
+    <li><strong>Tracking diffusion</strong> — is your thesis being recognized? (where are you on the S-curve?)</li>
+    <li><strong>Assisting hedging</strong> — what systematic exposures need neutralizing?</li>
+    <li><strong>Self-calibration</strong> — how accurate have you been? (Ω measurement)</li>
+</ol>
+
+<p>None of these <em>generate</em> edge. They support edge that exists elsewhere (in human beliefs).</p>
+
+<hr>
+
+<h2>The Boundary Condition</h2>
+
+<p>The boundary separates where edge is <em>created</em> from where edge is <em>managed</em>. This is both an architectural and epistemological distinction.</p>
+
+<div class="outside">
+    <div class="boundary-title">Outside the App — Where Edge is CREATED</div>
+    <ul>
+        <li>Human causal reasoning</li>
+        <li>Analyst judgment and expertise</li>
+        <li>Non-consensus belief formation</li>
+        <li>BBN construction (mental or explicit)</li>
+    </ul>
+    <p style="margin-top: 15px; margin-bottom: 0;"><strong>AI Role: THOUGHT PARTNER (unconstrained)</strong></p>
+    <ul style="margin-top: 10px; margin-bottom: 0;">
+        <li>Help research, summarize, challenge</li>
+        <li>Assist causal reasoning</li>
+        <li>Process evidence</li>
+        <li>No limits — serves belief formation</li>
+    </ul>
+</div>
+
+<p style="text-align: center; font-size: 1.2em; margin: 20px 0;">
+    ↓ <strong>BELIEFS ENTER HERE</strong> ↓<br>
+    <span style="font-size: 0.9em; color: #666;">(PTA, scenarios, probabilities, red nodes, confidence)</span>
+</p>
+
+<div class="inside">
+    <div class="boundary-title">Inside the App — Where Edge is OPTIMIZED & DEPLOYED</div>
+    <ul>
+        <li>Capture beliefs</li>
+        <li>Transform to optimal positions</li>
+        <li>Measure edge state</li>
+        <li>Monitor for exit signals</li>
+    </ul>
+    <p style="margin-top: 15px; margin-bottom: 0;"><strong>AI Role: INFRASTRUCTURE (constrained)</strong></p>
+    <ul style="margin-top: 10px; margin-bottom: 0;">
+        <li>Query your own data</li>
+        <li>Surface divergence from consensus</li>
+        <li>Detect diffusion</li>
+        <li>Cannot generate beliefs</li>
+    </ul>
+</div>
+
+<p style="text-align: center; font-size: 1.2em; margin: 20px 0;">
+    ↓ <strong>POSITIONS EXIT HERE</strong> ↓<br>
+    <span style="font-size: 0.9em; color: #666;">(optimal weights, trade instructions)</span>
+</p>
+
+<hr>
+
+<h2>The Conservation Law</h2>
+
+<div class="formula">
+    Edge In = Edge Out (minus leakage)
+</div>
+
+<p>The system <strong>transforms</strong>, <strong>measures</strong>, and <strong>deploys</strong> edge. It cannot <strong>create</strong> edge.</p>
+
+<p>The app does two things with edge:</p>
+
+<table>
+    <tr>
+        <th>Function</th>
+        <th>What it Means</th>
+    </tr>
+    <tr>
+        <td><strong>Deploy</strong></td>
+        <td>Translate beliefs into positions</td>
+    </tr>
+    <tr>
+        <td><strong>Optimize</strong></td>
+        <td>Extract maximum risk-adjusted return from those beliefs</td>
+    </tr>
+</table>
+
+<h3>How the App Optimizes Edge (Without Creating It)</h3>
+
+<table>
+    <tr>
+        <th>Optimization</th>
+        <th>What It Does</th>
+        <th>Impact</th>
+    </tr>
+    <tr>
+        <td><strong>Sizing (MVO/Kelly)</strong></td>
+        <td>Compute optimal position sizes</td>
+        <td>Don't over/under-bet</td>
+    </tr>
+    <tr>
+        <td><strong>Confidence calibration (Ω)</strong></td>
+        <td>Adjust stated confidence to empirical accuracy</td>
+        <td>Right-size conviction</td>
+    </tr>
+    <tr>
+        <td><strong>Correlation adjustment</strong></td>
+        <td>Account for redundant beliefs</td>
+        <td>True portfolio-level edge</td>
+    </tr>
+    <tr>
+        <td><strong>Timing (Forward Sharpe)</strong></td>
+        <td>Signal when edge is exhausted</td>
+        <td>Exit at right time</td>
+    </tr>
+    <tr>
+        <td><strong>Hedging</strong></td>
+        <td>Neutralize exposures without edge</td>
+        <td>Isolate alpha from noise</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    Same beliefs + bad sizing = leaked edge.<br>
+    Same beliefs + optimal sizing = maximum IR.<br><br>
+    <strong>The app ensures you get paid for all the edge you bring.</strong>
+</div>
+
+<h3>A Common Misconception: Does OPS Create Alpha?</h3>
+
+<p>It's tempting to claim that "Return at OPS - Actual Portfolio Return = Alpha Forgone." This framing implies that OPS itself generates alpha. It doesn't.</p>
+
+<div class="warning">
+    <strong>The Distinction:</strong><br><br>
+    <strong>OPS does not CREATE alpha.</strong> Alpha (edge) can only enter through human beliefs — this is our boundary condition.<br><br>
+    <strong>OPS OPTIMIZES alpha.</strong> It ensures you extract maximum risk-adjusted return from the edge you already have.
+</div>
+
+<p>If an analyst has zero edge (Ω = 0, meaning their conviction adds no predictive value), then no amount of position sizing optimization will generate returns above market. OPS would just be optimizing noise.</p>
+
+<p>The "alpha forgone" metric is real, but it measures <strong>capture efficiency</strong>, not edge generation:</p>
+
+<table>
+    <tr>
+        <th>Metric</th>
+        <th>What It Actually Measures</th>
+    </tr>
+    <tr>
+        <td><strong>Return at OPS - Actual Return</strong></td>
+        <td>How much edge you <em>leaked</em> through suboptimal sizing</td>
+    </tr>
+    <tr>
+        <td><strong>NOT</strong></td>
+        <td>How much edge OPS <em>created</em> for you</td>
+    </tr>
+</table>
+
+<p>Think of it this way: a perfectly calibrated scale doesn't make you heavier — it just tells you your true weight. OPS doesn't make your beliefs more accurate — it just ensures you're not leaving money on the table when your beliefs <em>are</em> accurate.</p>
+
+<div class="principle">
+    <strong>The Honest Claim</strong>
+    OPS helps you <strong>stop leaving money on the table</strong>. It <strong>preserves</strong> the edge you already have. It <strong>prevents leakage</strong> in the Edge In → Edge Out pipeline. But it cannot manufacture edge from nothing.
+</div>
+
+<hr>
+
+<h2>The Value Proposition</h2>
+
+<div class="value-prop">
+    <div class="headline">"We don't generate your edge. We make sure you get paid for all of it."</div>
+    <div class="subtext">The app is sophisticated plumbing for human insight.<br>Edge in ≈ Edge out, minus minimal leakage, deployed at maximum IR.</div>
+</div>
+
+<h3>What the App Promises</h3>
+
+<ul>
+    <li><strong>Capture</strong> your beliefs in structured form</li>
+    <li><strong>Optimize</strong> deployment (size, timing, hedging)</li>
+    <li><strong>Measure</strong> edge state (forward sharpe, α)</li>
+    <li><strong>Preserve</strong> edge (don't leak through bad sizing)</li>
+    <li><strong>Retire</strong> edge (sell discipline when exhausted)</li>
+    <li><strong>Score</strong> outcomes (close the learning loop)</li>
+</ul>
+
+<h3>What the App Does NOT Promise</h3>
+
+<ul>
+    <li>Find stocks for you</li>
+    <li>Generate trading signals</li>
+    <li>Replace your judgment</li>
+    <li>Create alpha from data</li>
+</ul>
+
+<!-- ============================================================== -->
+<!-- PART 2: APP ARCHITECTURE -->
+<!-- ============================================================== -->
+
+<div class="part-header">
+    <h2>Part 2: App Architecture</h2>
+    <p>WHAT we build — organized by layer</p>
+</div>
+
+<h2>The Stack: From Data to Decision</h2>
+
+<p>The app architecture is organized as a <strong>layered stack</strong>. Each layer builds on the one below, transforming raw inputs into actionable outputs. Understanding this stack clarifies where value is created and where it is not.</p>
+
+<div style="background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px; padding: 25px; margin: 25px 0;">
+<table style="margin: 0;">
+    <tr>
+        <th style="width: 20%;">Layer</th>
+        <th style="width: 40%;">What It Contains</th>
+        <th style="width: 40%;">Value Contribution</th>
+    </tr>
+    <tr>
+        <td><strong>Layer 5: Optimization</strong></td>
+        <td>Mean-variance optimization, position sizing, constraint handling</td>
+        <td>Transforms beliefs into optimal positions</td>
+    </tr>
+    <tr>
+        <td><strong>Layer 4: AI</strong></td>
+        <td>LLMs, ML models, agents for query and synthesis</td>
+        <td>Natural language access to all layers; pattern detection</td>
+    </tr>
+    <tr>
+        <td><strong>Layer 3: Dashboards</strong></td>
+        <td>Visual displays of data and derived data for human consumption</td>
+        <td>State awareness; monitoring; workflow support</td>
+    </tr>
+    <tr>
+        <td><strong>Layer 2: Derived Data</strong></td>
+        <td>Analytics computed from raw data (alpha, Sharpe, exposures, etc.)</td>
+        <td>Deterministic insights; math-based transformations</td>
+    </tr>
+    <tr>
+        <td><strong>Layer 1: Raw Data</strong></td>
+        <td>Prices, fundamentals, consensus, analyst inputs, historical records</td>
+        <td>Foundation; inputs to everything above</td>
+    </tr>
+</table>
+</div>
+
+<h3>The Pre-AI Model: Deterministic Analytics</h3>
+
+<p>Before AI integration, the value chain was simpler:</p>
+
+<div class="formula" style="text-align: center;">
+Raw Data → Derived Data (analytics) → Dashboards → Human Decision
+</div>
+
+<p>In this model:</p>
+<ul>
+    <li><strong>Derived data</strong> was the intelligence layer — math-based, deterministic calculations that extracted insights from raw data</li>
+    <li><strong>Dashboards</strong> were the primary interface — humans consumed derived data visually</li>
+    <li><strong>No AI</strong> — all computation was formula-based, predictable, auditable</li>
+</ul>
+
+<h3>The AI-Enabled Model: Query and Synthesis</h3>
+
+<p>With AI integration, a new layer emerges:</p>
+
+<div class="formula" style="text-align: center;">
+Raw Data → Derived Data → <strong>AI (query + synthesis)</strong> → Dashboards → Human Decision
+</div>
+
+<p>In this model:</p>
+<ul>
+    <li><strong>AI</strong> sits between data and dashboards — can query across all data, synthesize insights, respond to natural language</li>
+    <li><strong>Dashboards</strong> become one interface among several — AI chat is another</li>
+    <li><strong>Derived data</strong> remains essential — AI queries it, surfaces it, but doesn't replace deterministic calculation</li>
+</ul>
+
+<h3>The Strategic Implication</h3>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    As AI matures, the <strong>relative importance shifts</strong>:
+    <ul style="margin-bottom: 0;">
+        <li><strong>Dashboards</strong> become less central — AI can answer many questions that previously required a dashboard</li>
+        <li><strong>Data and derived data</strong> become more central — they're what AI queries; quality here determines AI quality</li>
+        <li><strong>AI</strong> becomes the primary interface for exploration and synthesis</li>
+        <li><strong>Dashboards</strong> remain valuable for monitoring, state awareness, and structured workflows — but not for discovery</li>
+    </ul>
+</div>
+
+<p>This stack model frames the detailed layer descriptions that follow. Each layer is examined for: what it contains, what value it provides, and what it <em>cannot</em> do.</p>
+
+<hr>
+
+<h2>User Personas: Who Uses What</h2>
+
+<p>The app serves distinct user types, each interacting with different layers and requiring different capabilities. Understanding these personas drives interface design and feature prioritization.</p>
+
+<h3>Primary Personas</h3>
+
+<table>
+    <tr>
+        <th>Persona</th>
+        <th>Primary Role</th>
+        <th>Layers Used</th>
+        <th>Key Needs</th>
+    </tr>
+    <tr>
+        <td><strong>Analyst</strong></td>
+        <td>Edge creation and articulation</td>
+        <td>Belief input, Layers 1-3</td>
+        <td>Capture beliefs, track diffusion, review accuracy</td>
+    </tr>
+    <tr>
+        <td><strong>Portfolio Manager</strong></td>
+        <td>Portfolio construction and risk allocation</td>
+        <td>Layers 2-5</td>
+        <td>Aggregate views, optimize sizing, monitor exposures</td>
+    </tr>
+    <tr>
+        <td><strong>Risk Manager</strong></td>
+        <td>Risk oversight and compliance</td>
+        <td>Layers 2-3, 7 dashboards</td>
+        <td>Exposure monitoring, limit checks, drawdown alerts</td>
+    </tr>
+    <tr>
+        <td><strong>CIO/Leadership</strong></td>
+        <td>Process oversight and resource allocation</td>
+        <td>Layers 3, 6 dashboards</td>
+        <td>Analyst rankings, system leakage, process health</td>
+    </tr>
+</table>
+
+<h3>Analyst Workflow</h3>
+
+<p>Analysts are the <strong>source of edge</strong>. Their workflow spans the boundary:</p>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>Activity</th>
+        <th>App Support</th>
+    </tr>
+    <tr>
+        <td><strong>Discovery</strong> (outside)</td>
+        <td>Research, form beliefs, identify red nodes</td>
+        <td>AI thought partner tools (Research Synthesizer, Consensus Mapper)</td>
+    </tr>
+    <tr>
+        <td><strong>Articulation</strong> (boundary)</td>
+        <td>Input PTA, scenarios, probabilities, confidence</td>
+        <td>Belief capture forms, red node elicitor</td>
+    </tr>
+    <tr>
+        <td><strong>Monitoring</strong> (inside)</td>
+        <td>Track diffusion, consensus convergence</td>
+        <td>Functions 2-3: Consensus monitoring, diffusion dashboards</td>
+    </tr>
+    <tr>
+        <td><strong>Review</strong> (inside)</td>
+        <td>Assess accuracy, learn from outcomes</td>
+        <td>Function 6: Scorekeeping, Ω calibration</td>
+    </tr>
+</table>
+
+<h3>Portfolio Manager Workflow</h3>
+
+<p>PMs <strong>deploy edge</strong> that analysts provide. Their workflow is entirely inside the boundary:</p>
+
+<table>
+    <tr>
+        <th>Phase</th>
+        <th>Activity</th>
+        <th>App Support</th>
+    </tr>
+    <tr>
+        <td><strong>Aggregation</strong></td>
+        <td>Review analyst inputs, assess conviction levels</td>
+        <td>Analyst dashboard, empirical Ω rankings</td>
+    </tr>
+    <tr>
+        <td><strong>Optimization</strong></td>
+        <td>Determine position sizes, respect constraints</td>
+        <td>Layer 5: MVO, B-L, constraint engine</td>
+    </tr>
+    <tr>
+        <td><strong>Hedging</strong></td>
+        <td>Identify/neutralize unintended systematic exposures</td>
+        <td>Functions 4-5: Hedge identification and execution</td>
+    </tr>
+    <tr>
+        <td><strong>Monitoring</strong></td>
+        <td>Track portfolio-level forward Sharpe, exposure drift</td>
+        <td>Functions 3, 7: Diffusion, core analytics</td>
+    </tr>
+    <tr>
+        <td><strong>Exit</strong></td>
+        <td>Harvest positions when edge exhausted</td>
+        <td>Sell discipline alerts, forward Sharpe thresholds</td>
+    </tr>
+</table>
+
+<h3>Risk Manager Workflow</h3>
+
+<p>Risk managers provide <strong>independent oversight</strong>. They consume data but don't create beliefs:</p>
+
+<table>
+    <tr>
+        <th>Function</th>
+        <th>What They Monitor</th>
+        <th>App Support</th>
+    </tr>
+    <tr>
+        <td><strong>Exposure Monitoring</strong></td>
+        <td>Factor loadings, concentration, correlations</td>
+        <td>Function 4: Hedge identification dashboards</td>
+    </tr>
+    <tr>
+        <td><strong>Limit Compliance</strong></td>
+        <td>Position limits, sector caps, VaR limits</td>
+        <td>Function 7: Risk analytics with alerts</td>
+    </tr>
+    <tr>
+        <td><strong>Drawdown Oversight</strong></td>
+        <td>Portfolio and position-level drawdowns</td>
+        <td>Function 7: Drawdown analysis</td>
+    </tr>
+    <tr>
+        <td><strong>Tail Risk</strong></td>
+        <td>Stress test results, correlation regime</td>
+        <td>Functions 4, 7: Stress tests, correlation matrices</td>
+    </tr>
+</table>
+
+<h3>Persona-Specific AI Interfaces</h3>
+
+<p>Each persona interacts with AI differently based on their role:</p>
+
+<table>
+    <tr>
+        <th>Persona</th>
+        <th>AI Outside (Thought Partner)</th>
+        <th>AI Inside (Infrastructure)</th>
+    </tr>
+    <tr>
+        <td><strong>Analyst</strong></td>
+        <td>Research synthesis, evidence extraction, assumption challenging</td>
+        <td>"What's my forward Sharpe on AAPL?" "Is street moving toward my PTA?"</td>
+    </tr>
+    <tr>
+        <td><strong>PM</strong></td>
+        <td>Macro research, scenario analysis</td>
+        <td>"Which positions have highest forward Sharpe?" "What's driving my tech exposure?"</td>
+    </tr>
+    <tr>
+        <td><strong>Risk Manager</strong></td>
+        <td>Limited — role is oversight, not belief formation</td>
+        <td>"What positions breach limits?" "What's portfolio VaR?"</td>
+    </tr>
+    <tr>
+        <td><strong>CIO</strong></td>
+        <td>Limited — strategic, not operational</td>
+        <td>"Which analysts have highest IR?" "What's system leakage?"</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    The app serves different personas differently. <strong>Analysts</strong> need tools that cross the boundary (discovery outside → capture inside). <strong>PMs</strong> work entirely inside, consuming what analysts provide. <strong>Risk</strong> and <strong>leadership</strong> need monitoring and scorekeeping — they consume outputs but don't add beliefs.
+</div>
+
+<hr>
+
+<h2>Layer 1: Raw Data</h2>
+
+<div class="layer">
+    <div class="layer-title">Role</div>
+    Evidence for beliefs, consensus signal, inputs to derived calculations.<br><br>
+    <strong>Limitation:</strong> Rarely generates edge on its own (symmetric, available to all)
+</div>
+
+<table>
+    <tr>
+        <th>Data Type</th>
+        <th>Purpose</th>
+        <th>Creates Edge?</th>
+    </tr>
+    <tr>
+        <td><strong>Analyst PTAs + scenarios</strong></td>
+        <td>Captured beliefs (edge enters here)</td>
+        <td class="check">YES (input)</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus estimates</strong></td>
+        <td>Know what to diverge from</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Prices</strong></td>
+        <td>Forward sharpe calc, outcome tracking</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Factor returns</strong></td>
+        <td>Hedging, attribution</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Fundamentals (FactSet)</strong></td>
+        <td>Evidence for beliefs</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Historical analyst predictions</strong></td>
+        <td>Ω calibration</td>
+        <td class="cross">NO</td>
+    </tr>
+</table>
+
+<h3>Raw Data Requirements by Dashboard Function</h3>
+
+<p>Each dashboard function requires specific raw data inputs. This mapping clarifies what data must be captured, sourced, or integrated:</p>
+
+<table>
+    <tr>
+        <th>Dashboard Function</th>
+        <th>Required Raw Data</th>
+        <th>Source</th>
+    </tr>
+    <tr>
+        <td><strong>1. Consensus Extraction</strong></td>
+        <td>Street EPS/revenue estimates, guidance history, broker research metadata</td>
+        <td>FactSet, Bloomberg, company filings</td>
+    </tr>
+    <tr>
+        <td><strong>2. Consensus Monitoring</strong></td>
+        <td>Estimate revision timestamps, analyst-level estimates, earnings surprise history</td>
+        <td>FactSet, I/B/E/S</td>
+    </tr>
+    <tr>
+        <td><strong>3. Diffusion Monitoring</strong></td>
+        <td>Daily prices, internal PTA history, scenario probabilities over time</td>
+        <td>Market data + internal capture</td>
+    </tr>
+    <tr>
+        <td><strong>4. Hedge Identification</strong></td>
+        <td>Holdings, position sizes, factor loadings, covariance estimates</td>
+        <td>OMS/PMS + factor vendor</td>
+    </tr>
+    <tr>
+        <td><strong>5. Hedge Execution</strong></td>
+        <td>Hedge instrument universe (ETFs, futures, options), liquidity data, cost estimates</td>
+        <td>Market data + broker</td>
+    </tr>
+    <tr>
+        <td><strong>6. Scorekeeping</strong></td>
+        <td>Historical PTAs + scenarios + dates, realized prices at horizon, trade history</td>
+        <td>Internal capture + market data</td>
+    </tr>
+    <tr>
+        <td><strong>7. Core Analytics</strong></td>
+        <td>Holdings, NAV history, benchmark returns, transaction data</td>
+        <td>OMS/PMS + custodian</td>
+    </tr>
+</table>
+
+<h3>Raw Data for AI Tools (Outside Boundary)</h3>
+
+<p>AI tools that assist belief formation require additional data — primarily unstructured text and external signals:</p>
+
+<table>
+    <tr>
+        <th>AI Tool</th>
+        <th>Required Raw Data</th>
+        <th>Source</th>
+    </tr>
+    <tr>
+        <td><strong>Research Synthesizer</strong></td>
+        <td>Earnings transcripts, 10-K/10-Q filings, broker research PDFs</td>
+        <td>SEC EDGAR, FactSet, broker feeds</td>
+    </tr>
+    <tr>
+        <td><strong>Evidence Extractor</strong></td>
+        <td>Management guidance, forward-looking statements, KPI disclosures</td>
+        <td>Filings, transcripts</td>
+    </tr>
+    <tr>
+        <td><strong>Diffusion Radar</strong></td>
+        <td>Tick data, option chain data, cross-asset prices (equity, credit, vol)</td>
+        <td>Market data vendors</td>
+    </tr>
+    <tr>
+        <td><strong>Historical Pattern Context</strong></td>
+        <td>Long-run financials, sector histories, analogous company databases</td>
+        <td>FactSet + proprietary databases</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Layer 2: Derived Data</h2>
+
+<div class="layer">
+    <div class="layer-title">Role</div>
+    Richer consensus picture, self-calibration, optimization inputs, edge measurement.<br><br>
+    <strong>Limitation:</strong> Calculations on symmetric inputs generally remain symmetric
+</div>
+
+<table>
+    <tr>
+        <th>Metric</th>
+        <th>Formula / Derivation</th>
+        <th>Source Data</th>
+    </tr>
+    <tr>
+        <td><strong>E[PTA]</strong></td>
+        <td>P<sub>up</sub>×PT<sub>up</sub> + P<sub>base</sub>×PT<sub>base</sub> + P<sub>down</sub>×PT<sub>down</sub></td>
+        <td>Analyst scenarios</td>
+    </tr>
+    <tr>
+        <td><strong>Expected Return</strong></td>
+        <td>E[PTA] / P<sub>current</sub> - 1</td>
+        <td>PTA + Prices</td>
+    </tr>
+    <tr>
+        <td><strong>Stated Confidence</strong></td>
+        <td>σ²<sub>stated</sub> = Σ Pᵢ × (PTᵢ - E[PTA])²</td>
+        <td>Analyst scenarios</td>
+    </tr>
+    <tr>
+        <td><strong>Forward Sharpe</strong></td>
+        <td>E[R<sub>ann</sub>] / σ</td>
+        <td>PTA + Prices + Vol</td>
+    </tr>
+    <tr>
+        <td><strong>Empirical Ω</strong></td>
+        <td>Var(R<sub>actual</sub> - R<sub>predicted</sub>) per analyst</td>
+        <td>Historical PTs + Outcomes</td>
+    </tr>
+    <tr>
+        <td><strong>Factor-Adjusted α</strong></td>
+        <td>R<sub>total</sub> - Σβᵢ×Fᵢ</td>
+        <td>Returns + Factors</td>
+    </tr>
+    <tr>
+        <td><strong>B-L Posterior Returns</strong></td>
+        <td>Blend prior (equal wt) + views (PTs) weighted by Ω</td>
+        <td>PTs + Covariance + Ω</td>
+    </tr>
+</table>
+
+<div class="warning">
+    <strong>The Derived Data Trap:</strong> Sophisticated derived metrics <em>feel</em> like insight because they're hard to compute. But difficulty ≠ edge. If the method is known and data is symmetric, the output is generally symmetric too. <em>Exception: proprietary methods applied faster or to unique data combinations can create edge — but this is the exception, not the rule.</em>
+</div>
+
+<h3>Derived Data Requirements by Dashboard Function</h3>
+
+<p>Each dashboard function consumes specific derived metrics. This mapping shows where derived data creates value:</p>
+
+<table>
+    <tr>
+        <th>Dashboard Function</th>
+        <th>Required Derived Data</th>
+        <th>Computation</th>
+    </tr>
+    <tr>
+        <td><strong>1. Consensus Extraction</strong></td>
+        <td>Estimate distributions, implied expectations, guidance gaps</td>
+        <td>Statistics on raw estimates; reverse-engineer from multiples</td>
+    </tr>
+    <tr>
+        <td><strong>2. Consensus Monitoring</strong></td>
+        <td>Revision velocity, revision breadth, surprise z-scores</td>
+        <td>Time-series analysis of estimate changes</td>
+    </tr>
+    <tr>
+        <td><strong>3. Diffusion Monitoring</strong></td>
+        <td>Forward Sharpe, price-to-PTA progress, consensus convergence rate</td>
+        <td>E[R]/σ; distance metrics; regression on convergence</td>
+    </tr>
+    <tr>
+        <td><strong>4. Hedge Identification</strong></td>
+        <td>β loadings (Fama factors), sector exposures, correlation matrices</td>
+        <td>Factor regression; covariance estimation</td>
+    </tr>
+    <tr>
+        <td><strong>5. Hedge Execution</strong></td>
+        <td>Hedge ratios, cost/benefit analysis, residual exposure</td>
+        <td>Optimization; scenario analysis</td>
+    </tr>
+    <tr>
+        <td><strong>6. Scorekeeping</strong></td>
+        <td>Empirical Ω, PT accuracy, alpha contribution, analyst IR</td>
+        <td>Variance of errors; regression-based attribution</td>
+    </tr>
+    <tr>
+        <td><strong>7. Core Analytics</strong></td>
+        <td>Rolling returns, tracking error, VaR, attribution splits</td>
+        <td>Standard portfolio analytics</td>
+    </tr>
+</table>
+
+<h3>The Pre-AI Analytics Pipeline</h3>
+
+<p>Before AI, all intelligence came from <strong>deterministic transformations</strong> of raw data. This remains the foundation:</p>
+
+<div class="formula">
+Raw Data → Derived Data → Dashboards → Human Decision
+</div>
+
+<p>The derived data layer performs the "math" that extracts structured insight from raw inputs:</p>
+
+<table>
+    <tr>
+        <th>Analytics Category</th>
+        <th>What It Computes</th>
+        <th>Value Created</th>
+    </tr>
+    <tr>
+        <td><strong>Expectation Analytics</strong></td>
+        <td>E[PTA], E[R], stated confidence, scenario spread</td>
+        <td>Quantifies analyst beliefs in usable form</td>
+    </tr>
+    <tr>
+        <td><strong>Risk Analytics</strong></td>
+        <td>Volatility, correlation, factor exposures, VaR</td>
+        <td>Measures portfolio risk in multiple dimensions</td>
+    </tr>
+    <tr>
+        <td><strong>Performance Analytics</strong></td>
+        <td>Alpha, Sharpe, IR, attribution by source</td>
+        <td>Quantifies outcomes vs. benchmarks and beliefs</td>
+    </tr>
+    <tr>
+        <td><strong>Calibration Analytics</strong></td>
+        <td>Empirical Ω, hit rates, conviction-outcome correlation</td>
+        <td>Measures process quality and analyst accuracy</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus Analytics</strong></td>
+        <td>Estimate distributions, revision trends, divergence measures</td>
+        <td>Maps market beliefs as baseline for edge</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    Derived data is the <strong>math layer</strong> — deterministic, auditable, and reproducible. It transforms raw inputs into decision-relevant metrics. AI (Layer 4) then provides <strong>query and synthesis</strong> across this computed foundation. Without solid derived data, AI has nothing useful to query.
+</div>
+
+<hr>
+
+<h2>Layer 3: Dashboards</h2>
+
+<div class="layer">
+    <div class="layer-title">Role</div>
+    Display layer for data and derived data. Support the seven legitimate functions.<br><br>
+    <strong>Limitation:</strong> Displaying symmetric information doesn't create asymmetry
+</div>
+
+<h3>Why These Dashboards Exist: The Benchmark Conflict</h3>
+
+<p>Before examining specific dashboards, we must understand <strong>why managers need them</strong>. The answer lies in a structural choice most managers make — and the consequences that follow.</p>
+
+<div class="insight">
+    <div class="insight-label">The Core Tension</div>
+    <strong>Theory says:</strong> If you have no edge in systematic factors, hedge them completely. Isolate α, return only α.<br><br>
+    <strong>Reality says:</strong> Most managers are measured against benchmarks that include β. Hedging systematic risk creates career risk — if the market rises 20% and you return 8% (pure α), you underperform and face redemptions.<br><br>
+    <strong>Result:</strong> Most managers carry systematic exposure they cannot predict, hoping to react fast enough when risk materializes.
+</div>
+
+<p>This creates a direct implication for dashboards:</p>
+
+<table>
+    <tr>
+        <th>Manager Choice</th>
+        <th>Dashboard Need</th>
+        <th>Function</th>
+    </tr>
+    <tr>
+        <td>Doesn't hedge Fama factors</td>
+        <td>Factor exposure monitor</td>
+        <td>"How much β am I carrying?"</td>
+    </tr>
+    <tr>
+        <td>Doesn't hedge macro drivers</td>
+        <td>Macro regime dashboard</td>
+        <td>"What state are we in?"</td>
+    </tr>
+    <tr>
+        <td>Relies on reaction speed</td>
+        <td>Diffusion / momentum signals</td>
+        <td>"Is something moving?"</td>
+    </tr>
+    <tr>
+        <td>Accepts drawdown risk</td>
+        <td>Correlation / vol regime</td>
+        <td>"Is diversification breaking down?"</td>
+    </tr>
+</table>
+
+<div class="warning">
+    <strong>The Dashboard as Hedge Substitute:</strong> These dashboards exist because managers have chosen <strong>reaction speed over structural protection</strong>. The dashboard doesn't create edge in systematic factors — it monitors exposures the manager has decided to carry despite having no edge. This is a legitimate function, but it's important to understand it's a <em>second-best solution</em> to the benchmark conflict, not an optimal strategy.<br><br>
+    <em>For the full treatment of the benchmark conflict and portable alpha solutions, see Section XVIII of <strong>Alpha by Design</strong>.</em>
+</div>
+
+<p>With this context, the seven dashboard functions divide naturally:</p>
+<ul>
+    <li><strong>Functions 1-3:</strong> Support α discovery and diffusion monitoring (where edge lives)</li>
+    <li><strong>Functions 4-5:</strong> Support β identification and hedging (for the rare manager who hedges)</li>
+    <li><strong>Functions 6-7:</strong> Support scorekeeping and core analytics (table stakes)</li>
+</ul>
+
+<p>For most managers, Functions 4-5 become <strong>monitoring tools</strong> rather than hedging tools — they watch systematic exposure and decide when to act, rather than hedging it away structurally.</p>
+
+<h4>Aspirational: The PM-Level Consensus BBN Generator</h4>
+
+<p>In Appendix C of <strong>Alpha by Design</strong>, we describe a Consensus BBN Elicitation Generator for analysts — a tool that provides company-specific node enumeration, consensus PDFs, and Jacobians as a starting point for edge discovery. The same architecture applies at the PM level for econometric/macro factors:</p>
+
+<table>
+    <tr>
+        <th>Component</th>
+        <th>Analyst Generator</th>
+        <th>PM Generator</th>
+    </tr>
+    <tr>
+        <td><strong>Node enumeration</strong></td>
+        <td>Company drivers (margin, volume, pricing, etc.)</td>
+        <td>Macro drivers (rates, GDP, inflation, credit spreads, etc.)</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus PDF</strong></td>
+        <td>Street estimates, implied expectations</td>
+        <td>Fed funds futures, inflation swaps, survey data</td>
+    </tr>
+    <tr>
+        <td><strong>Jacobians</strong></td>
+        <td>Sensitivity of stock value to each driver</td>
+        <td>Sensitivity of portfolio to each macro factor</td>
+    </tr>
+    <tr>
+        <td><strong>Output</strong></td>
+        <td>"Where do I disagree on this company?"</td>
+        <td>"Where do I disagree on macro — if anywhere?"</td>
+    </tr>
+</table>
+
+<p>For the PM who <strong>doesn't hedge</strong> (most managers), this transforms monitoring:</p>
+
+<table>
+    <tr>
+        <th>Without Generator</th>
+        <th>With Generator</th>
+    </tr>
+    <tr>
+        <td>Sees factor exposures (β loadings)</td>
+        <td>Sees β loadings <strong>+ consensus beliefs driving them</strong></td>
+    </tr>
+    <tr>
+        <td>Monitors "something is moving"</td>
+        <td>Monitors <strong>which node is moving vs. what expectation</strong></td>
+    </tr>
+    <tr>
+        <td>Reacts to drawdowns</td>
+        <td>Reacts to <strong>specific consensus breaks</strong></td>
+    </tr>
+    <tr>
+        <td>Implicit exposure to implicit beliefs</td>
+        <td><strong>Explicit exposure to explicit beliefs</strong></td>
+    </tr>
+</table>
+
+<p>Even without macro edge, this enables <strong>pre-computed reaction plans</strong>:</p>
+
+<div class="principle">
+    <strong>Example:</strong> "I'm exposed to rates via duration in my growth stocks. Consensus expects 3 cuts this year. My Jacobian says each cut surprise costs me 2% portfolio. If June FOMC signals fewer cuts, I know my exposure and can act — not scramble."
+</div>
+
+<p>For the rare PM who <strong>does</strong> have macro edge, the generator provides the same workflow as the analyst: consensus baseline → identify divergence → articulate why → size the expression.</p>
+
+<div class="warning">
+    <strong>Aspiration vs. Reality:</strong> This PM-level generator is largely aspirational. It requires: (1) real-time consensus extraction from derivatives and surveys, (2) portfolio-level Jacobian computation across macro factors, (3) integration with position-level data. Few organizations have this infrastructure today. However, the <em>concept</em> clarifies what dashboards should aspire to — not just "show me my exposures" but "show me my exposures <strong>to beliefs</strong>, with pre-computed sensitivities."
+</div>
+
+<!-- Function 1 -->
+<div class="function-header">Function 1: Consensus Extraction & Mapping <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Know precisely what the market believes, so you know what to diverge from.</p>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Consensus Estimates</strong></td>
+        <td>Street EPS, revenue, margins by quarter/year</td>
+        <td>Analyst</td>
+        <td>FactSet estimates</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Estimate Distribution</strong></td>
+        <td>Range of analyst estimates (not just mean)</td>
+        <td>Analyst</td>
+        <td>FactSet analyst-level estimates</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Implied Expectations</strong></td>
+        <td>Reverse-engineer expectations from price/multiple</td>
+        <td>Analyst, PM</td>
+        <td>Prices + fundamentals + model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Option-Implied Distribution</strong></td>
+        <td>Skew, kurtosis, tail probabilities</td>
+        <td>PM</td>
+        <td>Option chain data</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+    </tr>
+    <tr>
+        <td><strong>Guidance vs Consensus</strong></td>
+        <td>Company guidance relative to street</td>
+        <td>Analyst</td>
+        <td>FactSet + company filings</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Revision History</strong></td>
+        <td>How estimates evolved over time</td>
+        <td>Analyst</td>
+        <td>FactSet historical estimates</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+</table>
+
+<!-- Function 2 -->
+<div class="function-header">Function 2: Consensus Monitoring & Change Detection <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Track how consensus is evolving. Is it moving toward you (diffusion) or away (thesis risk)?</p>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Estimate Revision Trends</strong></td>
+        <td>Direction and velocity of consensus changes</td>
+        <td>Analyst, PM</td>
+        <td>FactSet estimates (time series)</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Revision Breadth</strong></td>
+        <td>How many analysts moving which direction</td>
+        <td>Analyst</td>
+        <td>FactSet analyst-level estimates</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Surprise Patterns</strong></td>
+        <td>Beats/misses relative to consensus</td>
+        <td>Analyst</td>
+        <td>FactSet estimates + actuals</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Price Response to News</strong></td>
+        <td>How price reacts to information</td>
+        <td>Analyst, PM</td>
+        <td>Prices + event timestamps</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Consensus Convergence</strong></td>
+        <td>Is street moving toward your PTA?</td>
+        <td>Analyst</td>
+        <td>FactSet estimates + internal PTAs</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+</table>
+
+<!-- Function 3 -->
+<div class="function-header">Function 3: Edge Diffusion Monitoring <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Track whether YOUR specific thesis is being recognized and priced in.</p>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Price-to-PTA Progress</strong></td>
+        <td>Current price vs your target, over time</td>
+        <td>Analyst, PM</td>
+        <td>Prices + analyst PTAs</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Forward Sharpe Decay</strong></td>
+        <td>Risk-adjusted return remaining</td>
+        <td>PM</td>
+        <td>Prices + PTAs + volatility</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Factor-Adjusted α</strong></td>
+        <td>Idiosyncratic return stripped of systematic</td>
+        <td>PM</td>
+        <td>Returns + factor model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Thesis Status</strong></td>
+        <td>On track / At risk / Played out</td>
+        <td>Analyst, PM</td>
+        <td>Prices + PTAs + diffusion metrics</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Sell Discipline Alerts</strong></td>
+        <td>Triggered when Forward Sharpe collapses</td>
+        <td>PM</td>
+        <td>Forward Sharpe calculations</td>
+        <td>Alert</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>S-Curve Position</strong></td>
+        <td>Early / mid / late diffusion estimate</td>
+        <td>Analyst, PM</td>
+        <td>Consensus history + ML model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+    </tr>
+</table>
+
+<!-- Function 4 -->
+<div class="function-header">Function 4: Hedge Identification <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Identify systematic exposures where you have NO edge, monitor how they're impacting performance, and decide when to hedge.</p>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Factor Exposures (β loadings)</strong></td>
+        <td>Market, value, momentum, size, sector betas (Fama or econometric)</td>
+        <td>PM, Risk</td>
+        <td>Holdings + factor model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Factor Performance</strong></td>
+        <td>How each factor is performing (MTD, QTD, YTD) — the return you're getting from exposures you didn't choose</td>
+        <td>PM</td>
+        <td>Factor returns data</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Alpha Corruption Monitor</strong></td>
+        <td>Factor contribution vs stock-picking contribution — is systematic drag overwhelming your alpha?</td>
+        <td>PM</td>
+        <td>Returns + factor attribution</td>
+        <td>Monitoring / Alert</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Exposure Attribution</strong></td>
+        <td>Which positions drive which exposures</td>
+        <td>PM, Risk</td>
+        <td>Holdings + factor model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Intended vs Unintended Bets</strong></td>
+        <td>Exposures with red nodes vs without</td>
+        <td>PM</td>
+        <td>Factor exposures + PM red nodes</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+    </tr>
+    <tr>
+        <td><strong>Unhedged Systematic Risk Flags</strong></td>
+        <td>Exposures without corresponding PM red nodes</td>
+        <td>PM, Risk</td>
+        <td>Factor exposures + PM red nodes</td>
+        <td>Alert</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Stress Test Results</strong></td>
+        <td>Portfolio response to systematic shocks</td>
+        <td>PM, Risk</td>
+        <td>Holdings + scenario definitions</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Alpha Corruption</div>
+    <strong>Alpha corruption</strong> occurs when systematic factor movements (that you have no edge on) overwhelm or distort the alpha you actually generated from stock-picking. The workflow is:
+    <ol>
+        <li><strong>See your loadings:</strong> "I have 0.3 beta to Value, 0.2 to Momentum"</li>
+        <li><strong>See factor performance:</strong> "Value is down 8% this month"</li>
+        <li><strong>See the impact:</strong> "My stock picks are working (+3% alpha) but Value drag is killing me (-2.4%)"</li>
+        <li><strong>Decide:</strong> "Should I tactically hedge some Value exposure to protect my alpha?"</li>
+    </ol>
+</div>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    If you see a systematic exposure WITHOUT a corresponding PM red node, that's an unintended bet. Either develop a thesis (make it intended) or hedge it (remove the exposure). The Factor Performance and Alpha Corruption dashboards help you decide <em>when</em> to act.
+</div>
+
+<!-- Function 5 -->
+<div class="function-header">Function 5: Hedge Execution <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Once unintended exposures are identified, show how to neutralize them.</p>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Hedge Recommendations</strong></td>
+        <td>Suggested instruments to offset each exposure</td>
+        <td>PM</td>
+        <td>Factor exposures + instrument universe</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Hedge Cost Analysis</strong></td>
+        <td>Cost of carry, tracking error, liquidity</td>
+        <td>PM</td>
+        <td>Market data + instrument specs</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Hedge Ratio Calculator</strong></td>
+        <td>Optimal hedge ratios given correlations</td>
+        <td>PM</td>
+        <td>Correlation data + holdings</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Residual Exposure</strong></td>
+        <td>What remains after proposed hedges</td>
+        <td>PM, Risk</td>
+        <td>Holdings + proposed hedges + factor model</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+</table>
+
+<h4>Hedging Instrument Menu</h4>
+
+<table>
+    <tr>
+        <th>Exposure Type</th>
+        <th>Instruments</th>
+    </tr>
+    <tr>
+        <td><strong>Market beta</strong></td>
+        <td>Index futures, SPY/QQQ puts, VIX calls</td>
+    </tr>
+    <tr>
+        <td><strong>Sector</strong></td>
+        <td>Sector ETFs (XLF, XLE, XLK, etc.)</td>
+    </tr>
+    <tr>
+        <td><strong>Style/Factor</strong></td>
+        <td>Factor ETFs (value, momentum, quality)</td>
+    </tr>
+    <tr>
+        <td><strong>Tail risk</strong></td>
+        <td>OTM puts, put spreads</td>
+    </tr>
+    <tr>
+        <td><strong>Currency</strong></td>
+        <td>FX forwards, currency ETFs</td>
+    </tr>
+</table>
+
+<!-- Function 6 -->
+<div class="function-header">Function 6: Scorekeeping & Accountability <span class="tag tag-diff">Differentiating</span></div>
+
+<p><strong>Purpose:</strong> Track actual performance against stated beliefs. Close the learning loop. Allocate capital to skill.</p>
+
+<h4>Analyst Scorekeeping</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>PT Accuracy Over Time</strong></td>
+        <td>Realized outcomes vs predicted PTAs</td>
+        <td>Analyst, CIO</td>
+        <td>Historical PTAs + realized prices</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Hit Rate / Win-Loss</strong></td>
+        <td>% of positions that reached PTA</td>
+        <td>Analyst, CIO</td>
+        <td>Historical PTAs + realized prices</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Stated vs Realized Ω</strong></td>
+        <td>Scenario spread vs actual error</td>
+        <td>Analyst, CIO</td>
+        <td>Historical scenarios + outcomes</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Alpha Contribution</strong></td>
+        <td>Factor-adjusted returns from positions</td>
+        <td>Analyst, PM, CIO</td>
+        <td>Returns + factor attribution</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Performance by Thesis Type</strong></td>
+        <td>Accuracy segmented by thesis category</td>
+        <td>Analyst, CIO</td>
+        <td>Historical PTAs + thesis tags</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Post-Mortems</strong></td>
+        <td>Structured learning from outcomes</td>
+        <td>Analyst</td>
+        <td>Position history + outcome data</td>
+        <td>Workflow</td>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+    </tr>
+</table>
+
+<h4>PM Scorekeeping</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Information Ratio</strong></td>
+        <td>α / Tracking Error</td>
+        <td>PM, CIO</td>
+        <td>Returns + benchmark returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Attribution by Analyst</strong></td>
+        <td>Which analysts drove returns</td>
+        <td>PM, CIO</td>
+        <td>Position-level attribution</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Sizing Effectiveness</strong></td>
+        <td>Returns from optimal vs equal-weight</td>
+        <td>PM, CIO</td>
+        <td>Historical weights + returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Hedge Effectiveness</strong></td>
+        <td>Did hedges preserve alpha?</td>
+        <td>PM, Risk</td>
+        <td>Hedge history + performance</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Analyst Accuracy Weighting</strong></td>
+        <td>Empirical Ω per analyst — who deserves more capital?</td>
+        <td>PM, CIO</td>
+        <td>Historical Ω by analyst</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+</table>
+
+<h4>Organizational Scorekeeping</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Analyst Rankings by IR</strong></td>
+        <td>Risk-adjusted alpha by analyst</td>
+        <td>CIO</td>
+        <td>Analyst-level attribution + returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Sector Coverage Effectiveness</strong></td>
+        <td>Alpha by sector</td>
+        <td>CIO</td>
+        <td>Sector-level attribution</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>System Leakage</strong></td>
+        <td>Gap between theoretical and realized IR</td>
+        <td>CIO</td>
+        <td>Theoretical IR calc + realized IR</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+    </tr>
+</table>
+
+<h4>The Power of Cross-Firm Benchmarking</h4>
+
+<p>Internal scorekeeping tells analysts and PMs where they stand <strong>within their firm</strong>. But a more powerful question is: where do they stand <strong>relative to peers across the industry</strong>?</p>
+
+<p>Cross-firm benchmarking — comparing analyst and PM metrics across multiple organizations — unlocks a distinct category of value. The logic follows directly from the framework's core distinction between what is trainable and what is not.</p>
+
+<div class="insight">
+    <div class="insight-label">The Trainable Layer</div>
+    <strong>Process quality</strong> (checklist discipline, scenario construction, update frequency)<br>
+    <strong>Calibration accuracy</strong> (conviction-to-outcome correlation, Ω estimation)<br>
+    <strong>Behavioral discipline</strong> (chasing avoidance, bias correction, revision patterns)<br><br>
+    These are all <strong>improvable through feedback</strong>. Cross-firm data provides the feedback that internal data cannot.
+</div>
+
+<p>The limitation of internal benchmarks:</p>
+
+<table>
+    <tr>
+        <th>Internal Only</th>
+        <th>Cross-Firm Benchmarks</th>
+    </tr>
+    <tr>
+        <td>Know your rank within your firm</td>
+        <td>Know your rank across the industry</td>
+    </tr>
+    <tr>
+        <td>Percentiles reflect local population</td>
+        <td>Percentiles reflect true peer universe</td>
+    </tr>
+    <tr>
+        <td>"Am I improving?"</td>
+        <td>"Am I improving relative to everyone?"</td>
+    </tr>
+    <tr>
+        <td>Process standards invented locally</td>
+        <td>Process standards calibrated to top performers</td>
+    </tr>
+    <tr>
+        <td>Blind spots remain blind</td>
+        <td>Industry best practices revealed</td>
+    </tr>
+</table>
+
+<h4>What Cross-Firm Comparison Can Improve</h4>
+
+<table>
+    <tr>
+        <th>Metric Category</th>
+        <th>Cross-Firm Insight</th>
+        <th>Alpha Impact</th>
+    </tr>
+    <tr>
+        <td><strong>Conviction Calibration</strong></td>
+        <td>"Your high-conviction win rate is 52%; top quartile across industry is 72%"</td>
+        <td>Better sizing → more α captured</td>
+    </tr>
+    <tr>
+        <td><strong>Process Discipline</strong></td>
+        <td>"Your checklist completion is 62%; industry best practice is 95%"</td>
+        <td>Better articulation → less leakage</td>
+    </tr>
+    <tr>
+        <td><strong>Scenario Quality</strong></td>
+        <td>"Your bull/base/bear spread is 10%; industry norm is 25%"</td>
+        <td>Better uncertainty estimation → better Ω</td>
+    </tr>
+    <tr>
+        <td><strong>Behavioral Patterns</strong></td>
+        <td>"Your chasing rate is 35%; top performers are under 10%"</td>
+        <td>Less α destruction</td>
+    </tr>
+    <tr>
+        <td><strong>Update Frequency</strong></td>
+        <td>"You update after misses only; top performers update symmetrically"</td>
+        <td>Faster thesis adjustment</td>
+    </tr>
+</table>
+
+<h4>What Cross-Firm Comparison Cannot Improve</h4>
+
+<p>Critically, cross-firm benchmarks <strong>cannot</strong>:</p>
+
+<ul>
+    <li>Tell you what to believe about a specific stock</li>
+    <li>Create edge where none exists</li>
+    <li>Make your insights correct</li>
+    <li>Generate the alpha-producing idea itself</li>
+</ul>
+
+<p>This is the same boundary we've established throughout the framework: <strong>infrastructure is trainable; edge is not</strong>.</p>
+
+<div class="principle">
+    <strong>The Value Proposition</strong>
+    Most analysts and PMs leave alpha on the table — not because they lack edge, but because process failures, miscalibration, and behavioral errors erode whatever edge exists.<br><br>
+    If an analyst has 100 bps of edge but process captures only 60%, improving process to 80% capture adds 20 bps of realized alpha. Cross-firm benchmarks accelerate that improvement by showing what "good" looks like — not within one firm's potentially mediocre population, but across the industry's top performers.
+</div>
+
+<p>The analogy to consensus is exact: <strong>you need to know what others believe to know if you're different</strong>. Cross-firm benchmarking is the consensus on process quality — the baseline to improve from.</p>
+
+<div class="warning">
+    <strong>Aspiration vs. Reality:</strong> Cross-firm benchmarking requires aggregated, anonymized data across multiple organizations — a significant infrastructure investment. Few have access to true industry-wide percentiles today. However, the concept clarifies what scorekeeping should aspire to: not just "how do I compare internally?" but "how do I compare to the best in the industry — and what specifically should I change?"
+</div>
+
+<!-- Function 7 -->
+<div class="function-header">Function 7: Core Performance & Risk Analytics <span class="tag tag-core">Table Stakes</span></div>
+
+<p><strong>Purpose:</strong> Standard measurement infrastructure. Not differentiating, but essential.</p>
+
+<h4>Portfolio Returns</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Absolute Returns</strong></td>
+        <td>Total return, MTD, QTD, YTD, ITD</td>
+        <td>PM, Risk, CIO</td>
+        <td>Portfolio NAV + holdings</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Relative Returns</strong></td>
+        <td>vs benchmark (active return)</td>
+        <td>PM, Risk, CIO</td>
+        <td>Portfolio returns + benchmark returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Rolling Returns</strong></td>
+        <td>1M, 3M, 6M, 12M rolling windows</td>
+        <td>PM, CIO</td>
+        <td>Historical returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Cumulative Return Chart</strong></td>
+        <td>Equity curve over time</td>
+        <td>PM, CIO</td>
+        <td>Historical NAV</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Drawdown Analysis</strong></td>
+        <td>Peak-to-trough declines</td>
+        <td>PM, Risk, CIO</td>
+        <td>Historical NAV</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+</table>
+
+<h4>Returns Attribution</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Factor Attribution</strong></td>
+        <td>Return from market, value, momentum, etc.</td>
+        <td>PM, Risk</td>
+        <td>Returns + factor model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Sector Attribution</strong></td>
+        <td>Return by sector allocation + selection</td>
+        <td>PM, CIO</td>
+        <td>Holdings + returns by sector</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Stock-Level Attribution</strong></td>
+        <td>Contribution by position</td>
+        <td>PM, Analyst</td>
+        <td>Position-level returns + weights</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Alpha vs Beta Split</strong></td>
+        <td>Idiosyncratic vs systematic return</td>
+        <td>PM, CIO</td>
+        <td>Returns + factor attribution</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+</table>
+
+<h4>Risk Measurement</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Volatility</strong></td>
+        <td>Realized vol, rolling windows</td>
+        <td>PM, Risk</td>
+        <td>Historical returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Tracking Error</strong></td>
+        <td>Volatility of active returns</td>
+        <td>PM, Risk, CIO</td>
+        <td>Portfolio + benchmark returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Beta</strong></td>
+        <td>Market sensitivity</td>
+        <td>PM, Risk</td>
+        <td>Returns + market returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>VaR / CVaR</strong></td>
+        <td>Tail risk estimates</td>
+        <td>Risk</td>
+        <td>Holdings + covariance model</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Correlation Matrix</strong></td>
+        <td>Position co-movements</td>
+        <td>PM, Risk</td>
+        <td>Position-level returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Liquidity Risk</strong></td>
+        <td>Days to liquidate</td>
+        <td>Risk</td>
+        <td>Holdings + volume data</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+</table>
+
+<h4>Analyst Win/Loss</h4>
+
+<table>
+    <tr>
+        <th>Dashboard</th>
+        <th>What it Shows</th>
+        <th>Persona</th>
+        <th>Data Required</th>
+        <th>Mode</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>Win Rate</strong></td>
+        <td>% of positions with positive α</td>
+        <td>Analyst, PM, CIO</td>
+        <td>Position-level returns + attribution</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Win/Loss Ratio</strong></td>
+        <td>Avg win size / Avg loss size</td>
+        <td>Analyst, PM, CIO</td>
+        <td>Position-level returns</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Exit Quality</strong></td>
+        <td>Returns left on table vs captured</td>
+        <td>Analyst, PM</td>
+        <td>Entry/exit prices + peak prices</td>
+        <td>Monitoring</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Layer 4: AI</h2>
+
+<div class="layer">
+    <div class="layer-title">Role</div>
+    Two distinct modes with different constraints based on the boundary condition.
+</div>
+
+<h3>ML's Legitimate Domain: State Detection, Not Belief Formation</h3>
+
+<p>Before discussing AI inside vs. outside the app, a clarification on what machine learning can and cannot do in this framework:</p>
+
+<div class="insight">
+    <div class="insight-label">The ML Boundary</div>
+    <strong>ML excels at state detection</strong> — identifying patterns, regimes, anomalies, and diffusion signatures in market data.<br><br>
+    <strong>ML does not form causal beliefs</strong> — it cannot determine <em>why</em> a company's margins will expand or <em>whether</em> management will execute on strategy.
+</div>
+
+<table>
+    <tr>
+        <th>ML CAN Do (State Detection)</th>
+        <th>ML CANNOT Do (Belief Formation)</th>
+    </tr>
+    <tr>
+        <td>Detect volatility regimes (risk-on/risk-off)</td>
+        <td>Judge whether management is competent</td>
+    </tr>
+    <tr>
+        <td>Identify diffusion patterns (something is being priced in)</td>
+        <td>Determine why consensus is wrong about margins</td>
+    </tr>
+    <tr>
+        <td>Classify sentiment from text</td>
+        <td>Evaluate whether a product will succeed</td>
+    </tr>
+    <tr>
+        <td>Flag anomalies worth investigating</td>
+        <td>Form a view on competitive dynamics</td>
+    </tr>
+    <tr>
+        <td>Detect cross-asset inconsistencies</td>
+        <td>Assess whether a catalyst will occur</td>
+    </tr>
+</table>
+
+<p>This distinction matters because it defines where ML creates value:</p>
+
+<ul>
+    <li><strong>Pre-research:</strong> ML flags <em>where to look</em> (Diffusion Radar, anomaly detection)</li>
+    <li><strong>During research:</strong> ML accelerates information processing (summarization, extraction)</li>
+    <li><strong>Post-belief:</strong> ML monitors state (is your thesis being priced in?)</li>
+</ul>
+
+<p>At no point does ML <em>form the belief</em> that constitutes edge. The human analyst remains the source of causal reasoning about company-specific outcomes.</p>
+
+<p><em>For treatment of factor strategies and systematic approaches within this framework, see Sections XIV-XV of <strong>Alpha by Design</strong>.</em></p>
+
+<h3>AI Outside the App: Thought Partner</h3>
+
+<div class="outside">
+    <p><strong>Role:</strong> Assist belief formation</p>
+    <p><strong>Constraints:</strong> None — serves the human's reasoning process</p>
+</div>
+
+<table>
+    <tr>
+        <th>Capability</th>
+        <th>Example</th>
+    </tr>
+    <tr>
+        <td><strong>Research synthesis</strong></td>
+        <td>"Summarize the bull/bear cases on AAPL services"</td>
+    </tr>
+    <tr>
+        <td><strong>Evidence processing</strong></td>
+        <td>"What did the 10-K say about supply chain risks?"</td>
+    </tr>
+    <tr>
+        <td><strong>Causal reasoning support</strong></td>
+        <td>"Help me think through how tariffs affect margins"</td>
+    </tr>
+    <tr>
+        <td><strong>Assumption challenging</strong></td>
+        <td>"What would have to be true for this thesis to fail?"</td>
+    </tr>
+    <tr>
+        <td><strong>BBN construction</strong></td>
+        <td>"What are the key drivers of this company's value?"</td>
+    </tr>
+</table>
+
+<p><em>This AI helps you FORM beliefs before they enter the app.</em></p>
+
+<h4>Alpha Theory Tools for Edge Discovery</h4>
+
+<p>Because edge is created <em>outside</em> the app boundary, Alpha Theory can provide tools, algorithms, and trained ML models that assist analysts in the belief formation process — without violating the framework's principles. These tools don't generate edge; they <strong>accelerate and discipline the human process</strong> that creates edge.</p>
+
+<table>
+    <tr>
+        <th>Tool</th>
+        <th>What It Does</th>
+        <th>How It Helps</th>
+    </tr>
+    <tr>
+        <td><strong>Research Synthesizer</strong></td>
+        <td>Ingests earnings calls, filings, broker research; produces structured summaries</td>
+        <td>Reduces time to understanding; surfaces key facts faster</td>
+    </tr>
+    <tr>
+        <td><strong>Evidence Extractor</strong></td>
+        <td>NLP-based extraction of quantitative claims, guidance, and management commitments</td>
+        <td>Creates auditable evidence trail for beliefs</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus Mapper</strong></td>
+        <td>Aggregates street estimates, identifies distribution of views, highlights divergence</td>
+        <td>Makes divergence explicit; surfaces red node candidates</td>
+    </tr>
+    <tr>
+        <td><strong>Red Node Elicitor</strong></td>
+        <td>Interactive questioning that surfaces where analyst's mental model differs from consensus</td>
+        <td>Structures the articulation of differentiated beliefs</td>
+    </tr>
+    <tr>
+        <td><strong>Causal Chain Builder</strong></td>
+        <td>Helps analyst articulate driver → outcome relationships; prompts for missing links</td>
+        <td>Makes implicit BBN explicit; identifies gaps in reasoning</td>
+    </tr>
+    <tr>
+        <td><strong>Assumption Challenger</strong></td>
+        <td>Given a thesis, generates falsification conditions and contrary evidence prompts</td>
+        <td>Stress-tests beliefs before capital is committed</td>
+    </tr>
+    <tr>
+        <td><strong>Historical Pattern Context</strong></td>
+        <td>Retrieves analogous situations from history (similar margin expansions, competitive dynamics)</td>
+        <td>Calibrates expectations against base rates</td>
+    </tr>
+    <tr>
+        <td><strong>Sector Knowledge Models</strong></td>
+        <td>Trained models with domain expertise (semiconductor supply chains, pharma pipelines, etc.)</td>
+        <td>Fills knowledge gaps; accelerates learning curve</td>
+    </tr>
+    <tr>
+        <td><strong>Diffusion Radar</strong></td>
+        <td>Scans universe for stocks showing diffusion signatures — abnormal drift, cross-asset inconsistencies, microstructure changes</td>
+        <td>Flags "something is moving here" — starting point for research</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Principle</div>
+    These tools operate <strong>before the app boundary</strong>. They assist the human in forming beliefs — they don't form beliefs autonomously. The analyst remains the source of edge; the tools accelerate discovery, improve articulation, and enforce discipline.
+</div>
+
+<h4>Diffusion Radar: A Special Case</h4>
+
+<p>The Diffusion Radar deserves special attention because it uses ML to detect that <em>someone's</em> thesis is being priced in — without knowing what that thesis is.</p>
+
+<p><strong>What it detects:</strong></p>
+<ul>
+    <li>Abnormal drift without public news</li>
+    <li>Cross-asset inconsistencies (equity vs credit vs options)</li>
+    <li>Microstructure changes (order flow, volume patterns)</li>
+    <li>Estimate revision clustering</li>
+    <li>Option skew changes before spot fully adjusts</li>
+</ul>
+
+<p><strong>What it outputs:</strong> "Diffusion signature detected in [TICKER] — worth investigating."</p>
+
+<p><strong>Why it's legitimate:</strong></p>
+<ul>
+    <li>ML <em>can</em> learn diffusion (it's a market property, not company-specific)</li>
+    <li>Detection is mid-cycle — some alpha typically remains</li>
+    <li>Human still has to discover the underlying thesis</li>
+    <li>It's a radar, not a signal — tells you where to look, not what to believe</li>
+</ul>
+
+<p>The analyst's job is to investigate <em>why</em> diffusion is occurring. If they can identify the underlying thesis and form their own view, they may capture residual alpha. If they can't identify a valid thesis, they pass.</p>
+
+<h4>The Edge Discovery Workflow</h4>
+
+<p>A complete pre-app workflow might look like:</p>
+
+<ol>
+    <li><strong>Opportunity Flagging:</strong> Diffusion Radar or Consensus Mapper surfaces candidates</li>
+    <li><strong>Research Intake:</strong> Synthesizer processes latest filings, calls, and research</li>
+    <li><strong>Consensus Mapping:</strong> Analyst sees where street stands on key drivers</li>
+    <li><strong>Red Node Elicitation:</strong> Interactive session surfaces analyst's divergent views</li>
+    <li><strong>Causal Chain Construction:</strong> Analyst articulates why their view leads to different outcomes</li>
+    <li><strong>Assumption Challenge:</strong> Tool stress-tests the thesis; analyst refines or abandons</li>
+    <li><strong>Evidence Documentation:</strong> Supporting evidence linked to each node in the chain</li>
+    <li><strong>Belief Capture:</strong> Structured output (PTA, scenarios, red nodes) enters the app</li>
+</ol>
+
+<p>The output of this workflow is the <strong>belief input</strong> that crosses the app boundary — now well-articulated, stress-tested, and evidence-backed.</p>
+
+<div class="principle">
+    <strong>The Consensus BBN Elicitation Generator</strong>
+    The full potential of these tools, when combined, is a <strong>Consensus BBN Elicitation Generator</strong> — a system that provides the analyst with a complete baseline: node enumeration, consensus PDF at each node, Jacobian estimates, and the consensus-implied price. The analyst's job transforms from "build a model from scratch" to <strong>"Where do I disagree with consensus, and why?"</strong> — a more productive question.<br><br>
+    <em>For the complete treatment of what ML can and cannot legitimately do in edge discovery, including capability maturity levels, see Appendix C of <strong>Alpha by Design</strong>.</em>
+</div>
+
+<h3>AI Inside the App: Infrastructure</h3>
+
+<div class="inside">
+    <p><strong>Role:</strong> Interface to your captured data, diffusion detection</p>
+    <p><strong>Constraints:</strong> Cannot generate beliefs, cannot add edge that wasn't input</p>
+</div>
+
+<table>
+    <tr>
+        <th>Capability</th>
+        <th>Example</th>
+        <th>Creates Edge?</th>
+    </tr>
+    <tr>
+        <td><strong>Query your data</strong></td>
+        <td>"What's my forward sharpe on AAPL?"</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Surface divergence</strong></td>
+        <td>"Where do my views differ most from consensus?"</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Calibration feedback</strong></td>
+        <td>"Am I overconfident on semis?"</td>
+        <td class="cross">NO</td>
+    </tr>
+    <tr>
+        <td><strong>Diffusion detection</strong></td>
+        <td>"Is my thesis being priced in?"</td>
+        <td class="partial">PARTIAL (decaying)</td>
+    </tr>
+    <tr>
+        <td><strong>Anomaly alerts</strong></td>
+        <td>"Something changed in my thesis chain"</td>
+        <td class="cross">NO</td>
+    </tr>
+</table>
+
+<h4>What AI Inside CANNOT Answer</h4>
+
+<table>
+    <tr>
+        <th>Question</th>
+        <th>Why Not</th>
+    </tr>
+    <tr>
+        <td>"What should I buy?"</td>
+        <td>Requires belief formation (outside boundary)</td>
+    </tr>
+    <tr>
+        <td>"Is this a good stock?"</td>
+        <td>Requires judgment (outside boundary)</td>
+    </tr>
+    <tr>
+        <td>"What does this news mean?"</td>
+        <td>Requires interpretation (outside boundary)</td>
+    </tr>
+</table>
+
+<h3>The Dashboard-AI Relationship: Defining the Search Space</h3>
+
+<p>A critical insight: <strong>dashboards define what AI can query</strong>. The "search space" for AI inside the app is exactly the data that dashboards display — raw data, derived data, and the relationships between them.</p>
+
+<table>
+    <tr>
+        <th>Dashboard Function</th>
+        <th>Defines AI Search Space For...</th>
+        <th>Example Queries</th>
+    </tr>
+    <tr>
+        <td><strong>1. Consensus Extraction</strong></td>
+        <td>Street estimates, implied expectations</td>
+        <td>"What's consensus EPS for MSFT?" "What growth is priced in?"</td>
+    </tr>
+    <tr>
+        <td><strong>2. Consensus Monitoring</strong></td>
+        <td>Estimate revisions, surprise history</td>
+        <td>"How have estimates moved this quarter?" "Who revised up?"</td>
+    </tr>
+    <tr>
+        <td><strong>3. Diffusion Monitoring</strong></td>
+        <td>Forward Sharpe, price-to-PTA, thesis status</td>
+        <td>"Which positions have declining forward Sharpe?" "Is my thesis working?"</td>
+    </tr>
+    <tr>
+        <td><strong>4. Hedge Identification</strong></td>
+        <td>Factor exposures, unintended bets</td>
+        <td>"What's my value exposure?" "Where am I unhedged?"</td>
+    </tr>
+    <tr>
+        <td><strong>5. Hedge Execution</strong></td>
+        <td>Hedge instruments, costs, residuals</td>
+        <td>"What's cheapest way to hedge my tech exposure?"</td>
+    </tr>
+    <tr>
+        <td><strong>6. Scorekeeping</strong></td>
+        <td>Accuracy metrics, analyst performance</td>
+        <td>"What's my Ω?" "Which analysts have best IR?"</td>
+    </tr>
+    <tr>
+        <td><strong>7. Core Analytics</strong></td>
+        <td>Returns, risk, attribution</td>
+        <td>"What's YTD alpha?" "What drove last month's return?"</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    Dashboards and AI inside share the <strong>same underlying data</strong>. The difference is interface: dashboards provide <em>visual, structured displays</em>; AI provides <em>natural language query and synthesis</em>. Building a dashboard implicitly builds the AI search space — and vice versa.
+</div>
+
+<h3>The Evolving Role: Dashboards Demoted, AI Promoted</h3>
+
+<p>As AI capabilities mature, the <strong>relative importance of dashboards declines</strong>. This is not deprecation — it's role clarification.</p>
+
+<table>
+    <tr>
+        <th>Capability</th>
+        <th>Dashboards Best For</th>
+        <th>AI Best For</th>
+    </tr>
+    <tr>
+        <td><strong>State Awareness</strong></td>
+        <td>At-a-glance monitoring; ambient awareness</td>
+        <td>On-demand queries when state matters</td>
+    </tr>
+    <tr>
+        <td><strong>Exploration</strong></td>
+        <td>Structured drill-downs on known paths</td>
+        <td>Ad-hoc questions; open-ended exploration</td>
+    </tr>
+    <tr>
+        <td><strong>Synthesis</strong></td>
+        <td>Limited — shows data, doesn't synthesize</td>
+        <td>Combines multiple data sources; generates narrative</td>
+    </tr>
+    <tr>
+        <td><strong>Workflow</strong></td>
+        <td>Structured data entry; form-based input</td>
+        <td>Conversational capture; unstructured → structured</td>
+    </tr>
+    <tr>
+        <td><strong>Alerts</strong></td>
+        <td>Visual flags; color-coded warnings</td>
+        <td>Contextual explanations; recommended actions</td>
+    </tr>
+</table>
+
+<h4>What Dashboards Retain</h4>
+
+<p>Even as AI becomes the primary query interface, dashboards remain valuable for:</p>
+
+<ul>
+    <li><strong>Ambient monitoring</strong> — wall screens showing portfolio state at a glance</li>
+    <li><strong>Structured workflows</strong> — belief capture forms, scenario builders, approval queues</li>
+    <li><strong>Regulatory reporting</strong> — standard formats required by compliance</li>
+    <li><strong>Audit trails</strong> — visual documentation of decisions and states</li>
+</ul>
+
+<h4>What AI Takes Over</h4>
+
+<p>AI becomes the primary interface for:</p>
+
+<ul>
+    <li><strong>Ad-hoc questions</strong> — "Why did my alpha drop last week?"</li>
+    <li><strong>Cross-functional queries</strong> — "Which positions have high forward Sharpe AND declining consensus?"</li>
+    <li><strong>Synthesis</strong> — "Summarize my portfolio's thesis status"</li>
+    <li><strong>Natural language capture</strong> — "Add a bull case for NVDA at $180 with 30% probability"</li>
+    <li><strong>Contextual recommendations</strong> — "Given my exposures, what should I consider hedging?"</li>
+</ul>
+
+<div class="principle">
+    <strong>The Strategic Shift</strong>
+    Dashboards become <strong>monitoring infrastructure</strong> — always-on displays that establish ambient awareness. AI becomes the <strong>primary interaction layer</strong> — the interface through which users explore, query, and act on their data. This is not either/or; it's a division of labor based on each interface's strengths.
+</div>
+
+<h4>Implications for Development</h4>
+
+<table>
+    <tr>
+        <th>Priority</th>
+        <th>Invest In</th>
+        <th>Rationale</th>
+    </tr>
+    <tr>
+        <td><strong>High</strong></td>
+        <td>Data quality and derived metrics (Layers 1-2)</td>
+        <td>Foundation for both dashboards and AI; poor data = poor AI</td>
+    </tr>
+    <tr>
+        <td><strong>High</strong></td>
+        <td>AI query infrastructure (Layer 4)</td>
+        <td>Primary interface; highest user-perceived value</td>
+    </tr>
+    <tr>
+        <td><strong>Medium</strong></td>
+        <td>Dashboard monitoring displays (Layer 3)</td>
+        <td>Necessary but not differentiating; ambient, not interactive</td>
+    </tr>
+    <tr>
+        <td><strong>High</strong></td>
+        <td>Workflow tools (capture, approval, execution)</td>
+        <td>Where beliefs enter; structured input matters</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Layer 5: Optimization Engine</h2>
+
+<div class="layer">
+    <div class="layer-title">Role</div>
+    Extract maximum risk-adjusted return from given beliefs.<br><br>
+    <strong>Limitation:</strong> Optimizes deployment of edge — does not create edge where none exists
+</div>
+
+<table>
+    <tr>
+        <th>Function</th>
+        <th>What it Does</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+        <td><strong>MVO sizing</strong></td>
+        <td>Compute w* ∝ Σ⁻¹ × α</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Ω calibration</strong></td>
+        <td>Adjust confidence to empirical accuracy</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>B-L blending</strong></td>
+        <td>Combine prior + views by precision</td>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+    </tr>
+    <tr>
+        <td><strong>Constraint handling</strong></td>
+        <td>Respect limits while maximizing IR</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+    <tr>
+        <td><strong>Rebalancing signals</strong></td>
+        <td>When to adjust positions</td>
+        <td><span class="tag tag-partial">Partial</span></td>
+    </tr>
+</table>
+
+<!-- ============================================================== -->
+<!-- PART 3: IMPLEMENTATION -->
+<!-- ============================================================== -->
+
+<div class="part-header">
+    <h2>Part 3: Implementation</h2>
+    <p>HOW and WHEN we build it</p>
+</div>
+
+<h2>Differentiation vs Table Stakes</h2>
+
+<p>Not all features create competitive advantage. The 7 dashboard functions fall into two categories:</p>
+
+<table>
+    <tr>
+        <th>Category</th>
+        <th>Functions</th>
+        <th>Strategic Role</th>
+    </tr>
+    <tr>
+        <td><strong>Differentiating</strong></td>
+        <td>1. Consensus Extraction<br>2. Consensus Monitoring<br>3. Diffusion Monitoring<br>4. Hedge Identification<br>5. Hedge Execution<br>6. Scorekeeping</td>
+        <td>Framework-aligned features that most firms don't do well. Our competitive advantage.</td>
+    </tr>
+    <tr>
+        <td><strong>Table Stakes</strong></td>
+        <td>7. Core Performance & Risk</td>
+        <td>Standard analytics everyone expects. Must deliver well, but not where we win.</td>
+    </tr>
+</table>
+
+<hr>
+
+<h2>Deliverability Assessment</h2>
+
+<div class="summary-box">
+<table>
+    <tr>
+        <th>Status</th>
+        <th>Meaning</th>
+        <th>Count</th>
+    </tr>
+    <tr>
+        <td><span class="tag tag-deliver">Deliver</span></td>
+        <td>Can build now with existing data</td>
+        <td>~45</td>
+    </tr>
+    <tr>
+        <td><span class="tag tag-partial">Partial</span></td>
+        <td>Requires additional logic or data enrichment</td>
+        <td>~20</td>
+    </tr>
+    <tr>
+        <td><span class="tag tag-aspire">Aspire</span></td>
+        <td>Requires new data capture or significant development</td>
+        <td>~10</td>
+    </tr>
+</table>
+</div>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    The existing data (holdings, price targets with scenarios, prices, FactSet) enables ~85% of the blueprint. The aspirational items are primarily qualitative capture (thesis documentation, evidence milestones, falsification conditions, PM systematic views).
+</div>
+
+<hr>
+
+<h2>Implementation Phases</h2>
+
+<div class="phase-header">Phase 1: Foundation (Deliver Now)</div>
+
+<p>Build on existing data to deliver core framework metrics:</p>
+
+<ul>
+    <li>Forward Sharpe calculation and dashboard</li>
+    <li>Factor-adjusted α by position and portfolio</li>
+    <li>Empirical Ω (analyst accuracy calibration)</li>
+    <li>B-L optimization with empirically-calibrated confidence</li>
+    <li>Consensus comparison (analyst PT vs street)</li>
+    <li>Core performance and risk dashboards</li>
+</ul>
+
+<div class="phase-header phase-2">Phase 2: Enhancement (Partial)</div>
+
+<p>Add logic and polish to partial-delivery items:</p>
+
+<ul>
+    <li>Hedge recommendations engine</li>
+    <li>Position sizing workflow (OPS → ROPS)</li>
+    <li>Thesis status classification (on track / at risk / played out)</li>
+    <li>Backtesting infrastructure</li>
+    <li>Implied expectations from price</li>
+</ul>
+
+<div class="phase-header phase-3">Phase 3: Aspiration (New Capture)</div>
+
+<p>Introduce new data capture for full framework alignment:</p>
+
+<ul>
+    <li>Thesis documentation (red nodes, causal chain)</li>
+    <li>Evidence milestones and falsification conditions</li>
+    <li>PM systematic view capture</li>
+    <li>Structured post-mortems</li>
+    <li>S-curve position estimation</li>
+    <li>Option-implied distributions</li>
+</ul>
+
+<hr>
+
+<h2>The Monitoring Philosophy</h2>
+
+<p>This blueprint encodes a fundamental shift in what investment professionals monitor:</p>
+
+<table>
+    <tr>
+        <th></th>
+        <th>Traditional Approach</th>
+        <th>Framework Approach</th>
+    </tr>
+    <tr>
+        <td><strong>What to watch</strong></td>
+        <td>Everything you're exposed to</td>
+        <td>Only what you have edge on</td>
+    </tr>
+    <tr>
+        <td><strong>Why watch it</strong></td>
+        <td>React to unexpected moves</td>
+        <td>Track evidence for beliefs</td>
+    </tr>
+    <tr>
+        <td><strong>Systematic risk</strong></td>
+        <td>Monitor and try to manage</td>
+        <td>Hedge unless you have a red node</td>
+    </tr>
+    <tr>
+        <td><strong>Sell discipline</strong></td>
+        <td>Price targets, stop losses</td>
+        <td>Forward Sharpe thresholds</td>
+    </tr>
+    <tr>
+        <td><strong>Analyst evaluation</strong></td>
+        <td>Hit rate, returns</td>
+        <td>Calibrated accuracy (Ω)</td>
+    </tr>
+</table>
+
+<div class="principle">
+    <strong>The Guiding Principle</strong>
+    You monitor what you claim edge on. You hedge what you don't. The dashboard follows the belief structure.
+</div>
+
+<hr>
+
+<h2>IP and Defensibility: Where the Moat Lives</h2>
+
+<p>Not all components of this architecture are equally defensible. Understanding which elements constitute intellectual property — and which are commodity — shapes strategic investment and competitive positioning.</p>
+
+<p><em>For the complete treatment of moat architecture and defensibility analysis, see the companion document <strong>Alpha by Design: Moat Analysis</strong>.</em></p>
+
+<div class="principle">
+    <strong>The Core Insight</strong>
+    The moat is not in the framework. The moat is not even in the tools. The moat is in the <strong>aggregated, cross-firm data</strong> that the framework's implementation generates — and the <strong>structured linkage between explicit beliefs and outcomes</strong> that no competitor possesses.
+</div>
+
+<h3>The Moat Stack</h3>
+
+<p>Defensibility increases as you move down the stack:</p>
+
+<table>
+    <tr>
+        <th>Layer</th>
+        <th>What It Is</th>
+        <th>Defensibility</th>
+        <th>Why</th>
+    </tr>
+    <tr>
+        <td><strong>1. Framework</strong></td>
+        <td>Alpha by Design concepts, principles, methodology</td>
+        <td><span class="tag tag-core">SHALLOW</span></td>
+        <td>Can be copied once published; shareable as the "hook"</td>
+    </tr>
+    <tr>
+        <td><strong>2. Generic Tools</strong></td>
+        <td>Basic dashboards, standard optimization, reporting</td>
+        <td><span class="tag tag-core">SHALLOW</span></td>
+        <td>Competitors know what to build</td>
+    </tr>
+    <tr>
+        <td><strong>2b. Novel Methodology Tools</strong></td>
+        <td>Red Node Elicitor, Consensus BBN Generator, Thesis-Linked Diffusion</td>
+        <td><span class="tag tag-partial">MODERATE</span></td>
+        <td>Missing from marketplace; require framework understanding</td>
+    </tr>
+    <tr>
+        <td><strong>2c. ML Models on Proprietary Data</strong></td>
+        <td>Trained algorithms embedded in tools</td>
+        <td><span class="tag tag-diff">DEEP</span></td>
+        <td>Cannot replicate without the data; tool is delivery mechanism</td>
+    </tr>
+    <tr>
+        <td><strong>3. Cross-Firm Data</strong></td>
+        <td>Aggregated benchmarks, calibration models, process patterns</td>
+        <td><span class="tag tag-diff">DEEP</span></td>
+        <td>Requires client base; network effects compound</td>
+    </tr>
+    <tr>
+        <td><strong>4. Structured Belief → Outcome Linkage</strong></td>
+        <td>Years of explicit beliefs linked to outcomes across firms</td>
+        <td><span class="tag tag-diff">DEEPEST</span></td>
+        <td>Unique data structure; impossible to replicate without time</td>
+    </tr>
+</table>
+
+<h3>Proprietary Tools: What's Missing from the Marketplace</h3>
+
+<p>Several framework-specific tools have <strong>no market equivalent</strong>:</p>
+
+<table>
+    <tr>
+        <th>Tool</th>
+        <th>What It Does</th>
+        <th>Why Missing</th>
+    </tr>
+    <tr>
+        <td><strong>Red Node Elicitor</strong></td>
+        <td>Structures beliefs at driver level; surfaces divergence</td>
+        <td>Requires BBN framework; competitors capture unstructured notes</td>
+    </tr>
+    <tr>
+        <td><strong>Consensus BBN Generator</strong></td>
+        <td>Provides consensus at node level (not just EPS)</td>
+        <td>No one aggregates driver-level consensus</td>
+    </tr>
+    <tr>
+        <td><strong>Thesis-Linked Diffusion Tracker</strong></td>
+        <td>Tracks YOUR thesis diffusion, not generic momentum</td>
+        <td>Requires explicit thesis capture</td>
+    </tr>
+    <tr>
+        <td><strong>Belief → Outcome Attribution</strong></td>
+        <td>"You made money because margin belief was correct"</td>
+        <td>Competitors attribute to positions, not beliefs</td>
+    </tr>
+    <tr>
+        <td><strong>Transmission Leakage Dashboard</strong></td>
+        <td>Shows where alpha leaks in the pipeline</td>
+        <td>Requires full belief → position → outcome linkage</td>
+    </tr>
+</table>
+
+<h3>Where ML Transforms Tool Moat</h3>
+
+<p>Several "tools" are actually <strong>tool interface + trained ML model</strong>. The interface is shallow moat; the trained model is deep:</p>
+
+<table>
+    <tr>
+        <th>Tool</th>
+        <th>Interface (Replicable)</th>
+        <th>Trained Model (Deep Moat)</th>
+    </tr>
+    <tr>
+        <td><strong>Diffusion Radar</strong></td>
+        <td>Dashboard showing signals</td>
+        <td>ML trained on historical diffusion patterns</td>
+    </tr>
+    <tr>
+        <td><strong>Belief Performance Database</strong></td>
+        <td>Query interface</td>
+        <td>Models: "which belief types win" by industry</td>
+    </tr>
+    <tr>
+        <td><strong>Calibration Engine (Ω)</strong></td>
+        <td>Accuracy dashboard</td>
+        <td>Cross-firm calibration model</td>
+    </tr>
+    <tr>
+        <td><strong>Harvest Optimizer</strong></td>
+        <td>Exit recommendations</td>
+        <td>Model trained on harvest decisions + outcomes</td>
+    </tr>
+    <tr>
+        <td><strong>Red Node Elicitor</strong></td>
+        <td>Questioning workflow</td>
+        <td>LLM fine-tuned on productive edge discovery patterns</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Key Insight</div>
+    A competitor can copy the <strong>tool interface</strong>. They cannot copy the <strong>trained model</strong> without the proprietary data. The goal is to build tools that generate proprietary data and incorporate ML trained on that data. The tool becomes the delivery mechanism for a model competitors cannot replicate.
+</div>
+
+<h3>What Creates Defensible Advantage</h3>
+
+<p>The framework generates <strong>unique data at each pipeline stage</strong>. Aggregate that data across clients and you build models that improve with scale:</p>
+
+<table>
+    <tr>
+        <th>Pipeline Stage</th>
+        <th>Moat-Creating Asset</th>
+        <th>Why Defensible</th>
+    </tr>
+    <tr>
+        <td><strong>Discovery → Articulation</strong></td>
+        <td>Belief Performance Database</td>
+        <td>Links explicit red nodes to outcomes; tracks "which belief types win" by industry</td>
+    </tr>
+    <tr>
+        <td><strong>Articulation → Transmission</strong></td>
+        <td>Jacobian Library by Industry</td>
+        <td>Pre-computed sensitivities from many company models across clients</td>
+    </tr>
+    <tr>
+        <td><strong>Transmission → Optimization</strong></td>
+        <td>Transmission Leakage Calculator</td>
+        <td>Measures gap between analyst edge and realized alpha; cross-firm benchmarking</td>
+    </tr>
+    <tr>
+        <td><strong>Optimization → Monitoring</strong></td>
+        <td>Diffusion Signature Library</td>
+        <td>Predicts diffusion curves given thesis type; trained on historical patterns</td>
+    </tr>
+    <tr>
+        <td><strong>Monitoring → Harvest</strong></td>
+        <td>Harvest Optimizer</td>
+        <td>Trained on historical harvest decisions; cross-firm calibration</td>
+    </tr>
+</table>
+
+<h3>The Meta-Moat: Structured Belief → Outcome Data</h3>
+
+<p>The deepest moat comes from the <strong>unique data structure</strong> the framework creates:</p>
+
+<table>
+    <tr>
+        <th>Typical System</th>
+        <th>Alpha by Design Framework</th>
+    </tr>
+    <tr>
+        <td>Unstructured analyst notes</td>
+        <td>Structured BBN with explicit red nodes</td>
+    </tr>
+    <tr>
+        <td>Position sizes based on "conviction"</td>
+        <td>Sizes based on explicit edge + Ω</td>
+    </tr>
+    <tr>
+        <td>Outcomes attributed to "the position"</td>
+        <td>Outcomes attributed to <em>specific beliefs</em></td>
+    </tr>
+    <tr>
+        <td>"We made money"</td>
+        <td>"We made money <em>because margin belief was correct</em>"</td>
+    </tr>
+</table>
+
+<div class="insight">
+    <div class="insight-label">Why This Matters</div>
+    This structured linkage enables:
+    <ul>
+        <li><strong>Attribution:</strong> Which beliefs worked, which didn't</li>
+        <li><strong>Calibration:</strong> Who's good at which belief types</li>
+        <li><strong>Optimization:</strong> What articulation patterns predict success</li>
+        <li><strong>Benchmarking:</strong> How does your belief → outcome correlation compare to peers</li>
+    </ul>
+</div>
+
+<h3>The Network Effect</h3>
+
+<div class="principle">
+    <strong>The Flywheel</strong>
+    More clients → More data → Better benchmarks → More value → More clients
+</div>
+
+<p>Each new firm that joins:</p>
+<ul>
+    <li>Contributes to the benchmark pool (anonymized)</li>
+    <li>Gets access to better benchmarks</li>
+    <li>Makes the product more valuable for everyone</li>
+</ul>
+
+<p>This is a <strong>classic data network effect moat</strong>. Competitors who copy the framework start with zero data. The historical data — years of beliefs linked to outcomes — compounds with each client.</p>
+
+<h3>Implications for Product Strategy</h3>
+
+<table>
+    <tr>
+        <th>Strategic Priority</th>
+        <th>Action</th>
+        <th>Moat Impact</th>
+    </tr>
+    <tr>
+        <td><strong>Share the framework</strong></td>
+        <td>Publish freely; establish thought leadership</td>
+        <td>Framework is the hook, not the moat; creates demand</td>
+    </tr>
+    <tr>
+        <td><strong>Build structured capture</strong></td>
+        <td>Design for explicit belief → outcome linkage from day one</td>
+        <td>Creates unique data structure competitors can't replicate</td>
+    </tr>
+    <tr>
+        <td><strong>Aggregate cross-firm data</strong></td>
+        <td>Anonymized benchmarks, calibration models, process patterns</td>
+        <td>Network effects; data moat compounds with client count</td>
+    </tr>
+    <tr>
+        <td><strong>Make benchmarks a product</strong></td>
+        <td>Clients pay for comparison: "Where do I stand vs. industry?"</td>
+        <td>Value from data, not tools; recurring differentiation</td>
+    </tr>
+    <tr>
+        <td><strong>Accumulate historical data</strong></td>
+        <td>Time is a moat; can't go back to collect past beliefs</td>
+        <td>First-mover advantage compounds over years</td>
+    </tr>
+</table>
+
+<div class="warning">
+    <strong>The Competitive Reality</strong>
+    A competitor could copy the framework and build similar tools. They would start with <strong>zero data</strong>. The existing historical data — years of beliefs linked to outcomes — can be retrospectively analyzed through this lens. That head start compounds with each new client.
+</div>
+
+<hr>
+
+<h2>Summary</h2>
+
+<h3>The Learning Loop</h3>
+
+<p style="font-family: monospace; background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
+Form belief → Capture → Deploy → Monitor diffusion → Exit → SCORE → Learn → Form better beliefs<br>
+↑ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>
+└────────────────────────────────────────────────────────────────────────────────────────────────┘
+</p>
+
+<h3>Tech Stack Summary</h3>
+
+<table>
+    <tr>
+        <th>Layer</th>
+        <th>Role</th>
+        <th>Creates Edge?</th>
+    </tr>
+    <tr>
+        <td><strong>Human beliefs</strong></td>
+        <td>Source of causal edge</td>
+        <td class="check">YES (primary source)</td>
+    </tr>
+    <tr>
+        <td><strong>AI outside (thought partner)</strong></td>
+        <td>Assist belief formation</td>
+        <td class="cross">NO (accelerates human process)</td>
+    </tr>
+    <tr>
+        <td><strong>Raw data</strong></td>
+        <td>Evidence, consensus signal</td>
+        <td class="cross">RARELY (symmetric in most cases)</td>
+    </tr>
+    <tr>
+        <td><strong>Derived data</strong></td>
+        <td>Richer measurement, calibration</td>
+        <td class="cross">RARELY (unless proprietary method + speed)</td>
+    </tr>
+    <tr>
+        <td><strong>ML / AI inside</strong></td>
+        <td>State detection, diffusion monitoring</td>
+        <td class="partial">PARTIAL (state detection, not belief formation)</td>
+    </tr>
+    <tr>
+        <td><strong>Dashboards</strong></td>
+        <td>Display state (7 functions)</td>
+        <td class="cross">RARELY (display ≠ asymmetry)</td>
+    </tr>
+    <tr>
+        <td><strong>Optimization</strong></td>
+        <td>Maximize IR from beliefs</td>
+        <td class="cross">NO (preserves, doesn't create)</td>
+    </tr>
+    <tr>
+        <td><strong>Positions</strong></td>
+        <td>Where edge exits</td>
+        <td class="cross">NO (deployment)</td>
+    </tr>
+</table>
+
+<div class="value-prop">
+    <div class="headline">Edge In = Edge Out (minus leakage)</div>
+    <div class="subtext">The system transforms, measures, and deploys. It cannot create.</div>
+</div>
+
+</body>
+</html>
