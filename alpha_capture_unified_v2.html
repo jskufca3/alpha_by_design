@@ -639,9 +639,62 @@
 <h2>The Foundational Principle</h2>
 
 <div class="principle">
-    <strong>Edge enters only through human beliefs. Everything else is infrastructure.</strong>
+    <strong>Edge enters only through human beliefs AND human constraint policies. Everything else is infrastructure.</strong>
     The app is an alpha management system, not an alpha generation system. It captures, optimizes, deploys, measures, and retires edge that originates outside its boundary.
 </div>
+
+<h3>Two Sources of Human Edge</h3>
+
+<p>Alpha originates from two distinct types of human judgment:</p>
+
+<table>
+    <tr>
+        <th>Source</th>
+        <th>What It Is</th>
+        <th>Example</th>
+    </tr>
+    <tr>
+        <td><strong>Red Nodes (Beliefs)</strong></td>
+        <td>Non-consensus probability assessments — where you disagree with the market</td>
+        <td>"I believe pricing power is stronger than consensus expects"</td>
+    </tr>
+    <tr>
+        <td><strong>Gate Nodes (Constraints)</strong></td>
+        <td>Policy-based filters — where you refuse to participate regardless of other beliefs</td>
+        <td>"I don't invest in companies with poor management quality"</td>
+    </tr>
+</table>
+
+<p>Red nodes generate alpha through <em>belief mispricing</em>. Gate nodes generate alpha through <em>bet selection</em> — filtering for situations where beliefs transmit reliably to outcomes.</p>
+
+<div class="insight">
+    <div class="insight-label">Key Distinction</div>
+    Two investors with <strong>identical beliefs</strong> can generate different alpha if they apply different constraint policies. The edge is partially encoded in the decision function, not just the posterior distribution.
+</div>
+
+<h4>Policy Constraints vs Mandate Constraints</h4>
+
+<p>Not all constraints are equal:</p>
+
+<table>
+    <tr>
+        <th>Type</th>
+        <th>Source</th>
+        <th>Alpha Implication</th>
+    </tr>
+    <tr>
+        <td><strong>Policy constraints</strong></td>
+        <td>Investor's own learnings and judgment</td>
+        <td>Alpha-generating — part of edge creation</td>
+    </tr>
+    <tr>
+        <td><strong>Mandate constraints</strong></td>
+        <td>Client restrictions, regulatory requirements</td>
+        <td>Alpha-neutral or limiting — operating environment</td>
+    </tr>
+</table>
+
+<p>"I don't invest in poor management" is a policy constraint — learned judgment that filters for better outcomes. "I can't invest in tobacco" is a mandate constraint — an operating parameter. Both constrain the portfolio; only one generates alpha.</p>
 
 <h3>Claim 1: Real-Time Dashboard Data is Generally Unedgeable</h3>
 
@@ -681,7 +734,8 @@
     <ul>
         <li>Human causal reasoning</li>
         <li>Analyst judgment and expertise</li>
-        <li>Non-consensus belief formation</li>
+        <li>Non-consensus belief formation (red nodes)</li>
+        <li>Constraint policy formation (gate nodes)</li>
         <li>BBN construction (mental or explicit)</li>
     </ul>
     <p style="margin-top: 15px; margin-bottom: 0;"><strong>AI Role: THOUGHT PARTNER (unconstrained)</strong></p>
@@ -694,14 +748,15 @@
 </div>
 
 <p style="text-align: center; font-size: 1.2em; margin: 20px 0;">
-    ↓ <strong>BELIEFS ENTER HERE</strong> ↓<br>
-    <span style="font-size: 0.9em; color: #666;">(PTA, scenarios, probabilities, red nodes, confidence)</span>
+    ↓ <strong>BELIEFS + CONSTRAINTS ENTER HERE</strong> ↓<br>
+    <span style="font-size: 0.9em; color: #666;">(PTA, scenarios, probabilities, red nodes, gate nodes, confidence)</span>
 </p>
 
 <div class="inside">
     <div class="boundary-title">Inside the App — Where Edge is OPTIMIZED & DEPLOYED</div>
     <ul>
-        <li>Capture beliefs</li>
+        <li>Capture beliefs and constraint policies</li>
+        <li>Enforce gate node filters (admissibility)</li>
         <li>Transform to optimal positions</li>
         <li>Measure edge state</li>
         <li>Monitor for exit signals</li>
@@ -711,7 +766,7 @@
         <li>Query your own data</li>
         <li>Surface divergence from consensus</li>
         <li>Detect diffusion</li>
-        <li>Cannot generate beliefs</li>
+        <li>Cannot generate beliefs or constraint policies</li>
     </ul>
 </div>
 
@@ -754,6 +809,11 @@
         <th>Optimization</th>
         <th>What It Does</th>
         <th>Impact</th>
+    </tr>
+    <tr>
+        <td><strong>Constraint filtering</strong></td>
+        <td>Enforce gate node policies</td>
+        <td>Play only where beliefs transmit reliably</td>
     </tr>
     <tr>
         <td><strong>Sizing (MVO/Kelly)</strong></td>
@@ -837,7 +897,8 @@
 <h3>What the App Promises</h3>
 
 <ul>
-    <li><strong>Capture</strong> your beliefs in structured form</li>
+    <li><strong>Capture</strong> your beliefs and constraint policies in structured form</li>
+    <li><strong>Filter</strong> opportunities through gate nodes (enforce admissibility)</li>
     <li><strong>Optimize</strong> deployment (size, timing, hedging)</li>
     <li><strong>Measure</strong> edge state (forward sharpe, α)</li>
     <li><strong>Preserve</strong> edge (don't leak through bad sizing)</li>

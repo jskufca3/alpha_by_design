@@ -153,7 +153,7 @@
 </table>
 
 <div class="principle">
-    <strong>The investor's challenge:</strong> Find situations where you know something the market doesn't, size your bets appropriately, and exit before the opportunity disappears.
+    <strong>The investor's challenge:</strong> Find situations where you know something the market doesn't, <em>filter for situations where beliefs transmit reliably to outcomes</em>, size your bets appropriately, and exit before the opportunity disappears.
 </div>
 
 <h2>How Our App Supports Them</h2>
@@ -172,27 +172,32 @@
         <td>Outside scope (AI tools can assist, but belief is human)</td>
     </tr>
     <tr>
-        <td><strong>2. Capture Belief</strong></td>
+        <td><strong>2. Apply Constraints</strong></td>
+        <td>Check if opportunity passes policy gates (management quality, transparency, etc.)</td>
+        <td>Constraint capture and enforcement — filter before sizing</td>
+    </tr>
+    <tr>
+        <td><strong>3. Capture Belief</strong></td>
         <td>Document price target, scenarios, confidence</td>
         <td>Structured input forms capture beliefs in usable format</td>
     </tr>
     <tr>
-        <td><strong>3. Size Position</strong></td>
+        <td><strong>4. Size Position</strong></td>
         <td>Decide how much to invest</td>
         <td>Optimization engine calculates sizing based on conviction + track record</td>
     </tr>
     <tr>
-        <td><strong>4. Monitor</strong></td>
+        <td><strong>5. Monitor</strong></td>
         <td>Track if thesis is playing out</td>
         <td>Dashboards show thesis status, market movement, remaining upside</td>
     </tr>
     <tr>
-        <td><strong>5. Exit</strong></td>
+        <td><strong>6. Exit</strong></td>
         <td>Sell when thesis is priced in or wrong</td>
         <td>Alerts when "forward Sharpe" declines (upside exhausted)</td>
     </tr>
     <tr>
-        <td><strong>6. Learn</strong></td>
+        <td><strong>7. Learn</strong></td>
         <td>Review what worked and didn't</td>
         <td>Scorekeeping tracks accuracy over time; calibrates future confidence</td>
     </tr>
@@ -200,12 +205,13 @@
 
 <h2>Where Dashboards Fit</h2>
 
-<p>Dashboards support steps 4-6: <strong>monitoring, alerting, and learning</strong>. They do NOT support step 1 (forming beliefs) — that's human judgment, potentially assisted by AI tools outside the app.</p>
+<p>Dashboards support steps 2 and 5-7: <strong>constraint enforcement, monitoring, alerting, and learning</strong>. They do NOT support step 1 (forming beliefs) — that's human judgment, potentially assisted by AI tools outside the app.</p>
 
 <div class="do-dont">
     <div class="do">
         <h4>Dashboards Show</h4>
         <ul>
+            <li>Constraint status (does this pass policy gates?)</li>
             <li>Current state (exposures, performance)</li>
             <li>Thesis progress (is it working?)</li>
             <li>Alerts (what needs attention?)</li>
@@ -224,7 +230,7 @@
 </div>
 
 <div class="tldr">
-    <strong>The Key Insight:</strong> Alpha comes from human beliefs. The app captures those beliefs and helps deploy them efficiently. Dashboards are the monitoring layer — showing state, progress, and accuracy. They don't create alpha; they help preserve it.
+    <strong>The Key Insight:</strong> Alpha comes from human beliefs <em>and</em> constraint policies. The app captures both and helps deploy them efficiently. Dashboards are the monitoring layer — showing constraint status, state, progress, and accuracy. They don't create alpha; they help preserve it.
 </div>
 
 <h2>The Absolute Return Problem: Why Risk Monitoring Matters</h2>
@@ -440,9 +446,31 @@
 <h2>The Core Principle</h2>
 
 <div class="principle">
-    <strong>Edge enters only through human beliefs. Everything else is infrastructure.</strong><br><br>
+    <strong>Edge enters only through human beliefs AND human constraint policies. Everything else is infrastructure.</strong><br><br>
     The app is an alpha <em>management</em> system, not an alpha <em>generation</em> system. Dashboards capture, display, and support decisions — they don't make the decisions.
 </div>
+
+<h3>Two Sources of Human Edge</h3>
+
+<table>
+    <tr>
+        <th>Source</th>
+        <th>What It Is</th>
+        <th>Example</th>
+    </tr>
+    <tr>
+        <td><strong>Red Nodes (Beliefs)</strong></td>
+        <td>Non-consensus probability assessments</td>
+        <td>"I believe pricing power is stronger than consensus expects"</td>
+    </tr>
+    <tr>
+        <td><strong>Gate Nodes (Constraints)</strong></td>
+        <td>Policy-based filters that determine participation</td>
+        <td>"I don't invest in companies with poor management quality"</td>
+    </tr>
+</table>
+
+<p>Red nodes generate alpha through <em>belief mispricing</em>. Gate nodes generate alpha through <em>bet selection</em> — filtering for situations where beliefs transmit reliably to outcomes. Both are human judgment. Both contribute to alpha.</p>
 
 <h2>What Dashboards Are For</h2>
 
@@ -452,16 +480,20 @@
         <th>Purpose</th>
     </tr>
     <tr>
+        <td><strong>Constraint Enforcement</strong></td>
+        <td>Show policy gate status — does this opportunity pass admissibility filters?</td>
+    </tr>
+    <tr>
         <td><strong>Monitoring</strong></td>
         <td>Show current state — exposures, performance, thesis status</td>
     </tr>
     <tr>
         <td><strong>Workflow</strong></td>
-        <td>Capture structured inputs — beliefs, scenarios, approvals</td>
+        <td>Capture structured inputs — beliefs, constraints, scenarios, approvals</td>
     </tr>
     <tr>
         <td><strong>Alerts</strong></td>
-        <td>Flag when attention is needed — limits, triggers, anomalies</td>
+        <td>Flag when attention is needed — limits, triggers, constraint violations, anomalies</td>
     </tr>
     <tr>
         <td><strong>Scorekeeping</strong></td>
@@ -634,6 +666,7 @@
 <ul>
     <li><strong>Which of the 7 functions does this serve?</strong> (If none, reconsider)</li>
     <li><strong>Who is the user?</strong> (Analyst, PM, Risk, Leadership)</li>
+    <li><strong>Does it support constraint enforcement?</strong> (Policy gates are alpha-generating)</li>
     <li><strong>Is the data available today?</strong> (Check Phase 1/2/3 — don't design for data we don't have)</li>
     <li><strong>What derived data does it require?</strong> (Can we compute it from existing raw data?)</li>
     <li><strong>Monitoring or workflow?</strong> (Optimize for the right mode)</li>
