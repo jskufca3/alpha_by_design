@@ -64,9 +64,9 @@ That's exactly where technology should sit in investing. It respects the boundar
 
 | Document | Description | Audience |
 |----------|-------------|----------|
-| **[I. Alpha by Design](alpha_by_design_unified_v6.html)** | The theoretical foundation. Establishes the boundary between edge creation and edge management, introduces Bayesian Belief Networks for analyst reasoning, and defines the alpha lifecycle from discovery through harvest. | Investment leadership, framework architects |
-| **[II. Alpha Capture System](alpha_capture_unified_v2.html)** | The implementation blueprint. Details the seven dashboard functions, data layer architecture, AI boundaries, and the full inventory of monitoring tools — from consensus extraction to scorekeeping. | Product managers, system architects, analysts |
-| **[III. Dashboard Design Guide](dashboard_design_guide.html)** | The practical handbook. Translates the framework into actionable guidance for teams building dashboards — what data exists, what can be derived, and how each visualization serves the investment process. | Dashboard developers, UX designers, data engineers |
+| **[I. Alpha by Design](https://jskufca3.github.io/alpha_by_design/alpha_by_design_unified_v6.html)** | The theoretical foundation. Establishes the boundary between edge creation and edge management, introduces Bayesian Belief Networks for analyst reasoning, and defines the alpha lifecycle from discovery through harvest. | Investment leadership, framework architects |
+| **[II. Alpha Capture System](https://jskufca3.github.io/alpha_by_design/alpha_capture_unified_v2.html)** | The implementation blueprint. Details the seven dashboard functions, data layer architecture, AI boundaries, and the full inventory of monitoring tools — from consensus extraction to scorekeeping. | Product managers, system architects, analysts |
+| **[III. Dashboard Design Guide](https://jskufca3.github.io/alpha_by_design/dashboard_design_guide.html)** | The practical handbook. Translates the framework into actionable guidance for teams building dashboards — what data exists, what can be derived, and how each visualization serves the investment process. | Dashboard developers, UX designers, data engineers |
 
 ---
 
